@@ -27,3 +27,9 @@ Combine collaboration and AI to streamline studying and exam prep. Students ofte
 # Contact
 
 - Team F - CS3203 Fall 2025
+
+# Branch Strategy
+- main → production-ready  
+- dev → testing  
+- feature branches → for tickets  
+- squash + merge → keep history clean  
