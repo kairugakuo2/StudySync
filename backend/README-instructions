@@ -1,0 +1,27 @@
+## Backend - Quick Start
+
+Follow these steps to run the backend locally:
+
+1. cd backend
+2. npm install
+3. npm start
+
+Once the server is running, open `http://localhost:3000/ping` in your browser or run:
+
+```bash
+curl http://localhost:3000/ping
+```
+
+You should see:
+
+```json
+{ "message": "pong" }
+```
+
+For live-reload during development, you can use:
+
+```bash
+npm run dev
+```
+
+
