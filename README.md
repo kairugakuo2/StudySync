@@ -33,3 +33,29 @@ Combine collaboration and AI to streamline studying and exam prep. Students ofte
 - dev -> testing
 - feature branches -> each ticket
 - squash + merge -> keep history clean
+
+# Repository Structure
+
+## 📂 Repository Structure
+
+```text
+StudySync/
+├── backend/
+│   ├── src/
+│   │   └── app.js            # Backend entry point
+│   └── package.json          # Backend dependencies
+├── docs/
+│   ├── design.md             # System design / diagrams
+│   ├── requirements.md       # Functional + non-functional requirements
+│   └── sprints.md            # Sprint notes / backlog
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── QuizGenerator.js
+│   │   │   ├── Whiteboard.js
+│   │   │   └── Workspace.js
+│   │   └── App.js            # Frontend app entry
+│   └── package.json          # Frontend dependencies
+├── .gitignore                # Git ignore file
+├── LICENSE                   # License file
+└── README.md                 # Project overview
