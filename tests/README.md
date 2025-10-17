@@ -28,33 +28,15 @@ tests/
 │   └── test_sendAssignment.js
 │
 ├── darriusFeature/           # Darrius Gardner (placeholder)
-│   └── 
+│   └── README.md
 │
 ├── utils/                    # Shared test utilities
 │   ├── mockData.js
+│   ├── testHelpers.js
+│   └── setup.js
 │
 └── README.md                 # This file
 ```
-
-## Test Naming Conventions
-
-### File Naming
-- All test files must start with `test_`
-- Use descriptive names that indicate the functionality being tested
-- Use camelCase for multi-word names
-- Examples:
-  - `test_addAssignment.js` ✅
-  - `test_userAuthentication.js` ✅
-  - `test_dataValidation.js` ✅
-  - `addAssignment.js` ❌ (missing test_ prefix)
-
-### Test Structure
-- Use `describe()` blocks to group related tests
-- Use descriptive test names that explain what is being tested
-- Follow the pattern: "should [expected behavior] when [condition]"
-- Examples:
-  - `test('should add assignment successfully', () => { ... })`
-  - `test('should handle validation errors when invalid data provided', () => { ... })`
 
 ### Team Responsibilities
 - **Will Ehrhart**: Assignment Tracker functionality
@@ -63,24 +45,24 @@ tests/
 - **Ridwan Durosimi**: Practice Problems
 - **Darrius Gardner**: TBD (placeholder folder ready)
 
-## Running Tests
+### File Naming
+- test files must start with `test_`
+- Examples:
+  - `test_addAssignment.js` ✅
+  - `addAssignment.js` ❌ (missing test_ prefix)
 
-### Run all tests
-```bash
-npm test
-```
-
-### Run tests for specific team member
-```bash
-npm test -- --testPathPattern=assignmentTracker
-npm test -- --testPathPattern=sharedWorkspaceDashboard
-npm test -- --testPathPattern=tutorTab
-npm test -- --testPathPattern=practiceProblems
-```
+### Test Structure
+Each file should include four main test cases:
+- Correct Case – valid inputs behave as expected
+- Incorrect Case – invalid inputs show an error
+- Boundary Case – lowest/highest valid inputs still work
+- Edge Case – weird inputs (null, empty string, etc.) don’t break anything
 
 ### Run specific test file
+
 ```bash
-npm test test_addAssignment.js
+cd tests/sharedWorkspaceDashboard
+node test_displayDashboard_manual.js
 ```
 
 ## Shared Utilities
@@ -88,17 +70,18 @@ npm test test_addAssignment.js
 The `utils/` directory contains shared resources:
 
 - **`mockData.js`**: Common mock data objects for testing
-- **`testHelpers.js`**: Utility functions for common test operations
-- **`setup.js`**: Global test setup and configuration
+- Each teammate can import mock data:
+```text
+const { mockUsers, mockAssignments } = require("../utils/mockData.js");
+```
 
 ## Best Practices
 
-1. **Isolation**: Each team member works in their own directory
-2. **Consistency**: Follow the established naming conventions
-3. **Reusability**: Use shared utilities when possible
-4. **Documentation**: Include comments explaining complex test logic
-5. **Coverage**: Aim for comprehensive test coverage of your features
-6. **Maintenance**: Keep tests up to date with code changes
+1. Keep it local – run tests with Node only
+2. Stay organized – one folder per teammate
+3. Use mockData.js instead of making new fake data
+4. Comment your tests – explain what’s being tested
+5. Keep it simple – if it works and prints PASS/FAIL, it’s good
 
 ## Adding New Tests
 
