@@ -24,20 +24,21 @@ Combine collaboration and AI to streamline studying and exam prep. Students ofte
 3. Generate AI-powered quizzes and flashcards.  
 4. Use the real-time whiteboard to collaborate during study sessions.  
 
-# Contact
+# Tech Stack
+- **Frontend:** React + Tailwind CSS  
+- **Backend:** Node.js (Express)  
+- **Database:** Firebase / JSON mock data  
+- **AI Integration:** OpenAI API  
+- **Testing:** Javascript (Manual Tests) 
+- **Version Control:** Git + GitHub (GitOps workflow)
 
-- Team F - CS3203 Fall 2025
 
 # Branch Strategy
-- main -> production-ready
-- dev -> testing
-- feature branches -> each ticket
-- squash + merge -> keep history clean
+- **main** -> production-ready (merge into main when feature complete)
+- **feature** -> each person's own branch for features and tests
+
 
 # Repository Structure
-
-## 📂 Repository Structure
-
 ```text
 StudySync/
 ├── backend/
@@ -47,7 +48,7 @@ StudySync/
 ├── docs/
 │   ├── design.md             # System design / diagrams
 │   ├── requirements.md       # Functional + non-functional requirements
-│   └── sprints.md            # Sprint notes / backlog
+│   └── sprints.md            # Sprint notes / team backlog
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
@@ -56,6 +57,91 @@ StudySync/
 │   │   │   └── Workspace.js
 │   │   └── App.js            # Frontend app entry
 │   └── package.json          # Frontend dependencies
+├── tests/
+│   ├── assignmentTracker/              # Will Ehrhart
+│   │   ├── test_addAssignment.js
+│   │   ├── test_markAsComplete.js
+│   │   └── test_getUpcomingAssignments.js
+│   ├── sharedWorkspaceDashboard/       # Gakuo Kairu
+│   │   ├── test_displayDashboard.js
+│   │   ├── test_updateWorkspaceView.js
+│   │   ├── test_fetchUserTasks.js
+│   │   └── test_renderCollaboratorList.js
+│   ├── tutorTab/                       # Ryan King
+│   │   ├── test_getStudentInfo.js
+│   │   ├── test_addStudent.js
+│   │   └── test_updateNotes.js
+│   ├── practiceProblems/               # Ridwan Durosimi
+│   │   ├── test_studentSelect.js
+│   │   ├── test_assignWork.js
+│   │   └── test_sendAssignment.js
+│   ├── darriusFeature/                 # Darrius Gardner
+│   │   └── README.md
+│   ├── utils/                # Shared test utilities
+│   │   └── mockData.js
+│   └── README.md             # Test naming conventions & guidelines
 ├── .gitignore                # Git ignore file
 ├── LICENSE                   # License file
 └── README.md                 # Project overview
+```
+
+# Contributing
+**Starting from scratch (first time setup)** 
+``` text
+# Run all of this in terminal
+
+git clone <repo-url>        # 1 - clone repo from Github to local machine
+cd StudySync                # 2 - move into repo folder
+
+git checkout main           # 3 - Jump into main branch first
+git pull origin main        # 4 - Pull latest version from Github (IMPORTANT)
+
+cd frontend && npm install  # 5 - install frontend dependencies
+cd ../backend && npm install    # 6 - install backend dependecies
+cd ..                       # 7 - return to root folder 
+```
+**Working on a feature** 
+``` text
+# 1 - Create your own branch for your feature
+git checkout -b feature/<your-name>-<feature>   
+
+
+# 2 - Work only on your assigned files/folder (don’t edit others’ code)
+# 3 - Write and test locally (use console.log or manual JS test scripts in /tests/)
+```
+**Saving work** 
+``` text
+git add .                                       # 1 - Stage all changes
+git commit -m "add short description"           # 2 - Commit on feature branch w/short message
+
+git checkout main                               # 3 - Switch to main
+git pull origin main                            # 4 - IMPORTANT - Pull latest version of main
+
+git checkout feature/<your-name>-<feature>      # 5 - Go back to feature branch
+git merge main                                  # 6 - Merge new changes (if any) from main into your feature branch
+
+git push origin feature/<your-name>-<feature>   # 7 - Push your branch to GitHub
+
+# 8 - Open a Pull Request (PR) on GitHub:
+#     Base: main
+#     Compare: your feature branch
+#     - Get a teammate to review (don’t merge your own PR)
+#     - Use “Squash + Merge” when merging
+```
+
+**After Merge**
+```test
+git checkout main           # 1 - Switch to main
+git pull origin main        # 2 - Get the latest code after merge
+# (Optional) delete your old branch locally or on GitHub to stay clean
+```
+
+# Testing
+Each teammate writes and runs manual JavaScript tests for their individual feature to verify across 4 equivalence partitions:
+- Correct Case – valid input(s) behave as expected
+- Incorrect Case – invalid input(s) trigger error
+- Boundary Case – input(s) at the lowest/highest valid limits still work
+- Edge Case – unexpected/unusual input(s) (null, empty string, etc.) still work
+
+# Contact
+- Team F - CS3203 Fall 2025 - University of Oklahoma
