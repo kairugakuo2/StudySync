@@ -100,16 +100,30 @@ cd frontend && npm install  # 5 - install frontend dependencies
 cd ../backend && npm install    # 6 - install backend dependecies
 cd ..                       # 7 - return to root folder 
 ```
-**Working on a feature** 
+
+**Working on a test (no file overlap)** 
+- always **Commit -> Pull -> Push**
+``` text
+git pull origin main                 # 1 - Always pull latest main first
+
+# 2 - Make your changes in your test folder
+
+git pull origin main
+git add .                            # 3 - Stage changes
+git commit -m "update test file"     # 4 - Commit with a short message
+git pull origin main                 # 5 - IMPORTANT - Pull new changes from main
+git push origin main                 # 5 - Push directly to main
+
+```
+**Working on a feature (conneted code with everyone)** 
 ``` text
 # 1 - Create your own branch for your feature
 git checkout -b feature/<your-name>-<feature>   
 
-
-# 2 - Work only on your assigned files/folder (don’t edit others’ code)
-# 3 - Write and test locally (use console.log or manual JS test scripts in /tests/)
+# 2 - Work/test only on your assigned files/folder
 ```
-**Saving work** 
+
+**Saving + Merging feature work** 
 ``` text
 git add .                                       # 1 - Stage all changes
 git commit -m "add short description"           # 2 - Commit on feature branch w/short message
@@ -122,18 +136,15 @@ git merge main                                  # 6 - Merge new changes (if any)
 
 git push origin feature/<your-name>-<feature>   # 7 - Push your branch to GitHub
 
-# 8 - Open a Pull Request (PR) on GitHub:
+# 8 - When feature is ready, open a Pull Request (PR) on GitHub:
 #     Base: main
 #     Compare: your feature branch
-#     - Get a teammate to review (don’t merge your own PR)
-#     - Use “Squash + Merge” when merging
-```
+#     - Get a teammate to review before merging
+#     - Use “Squash + Merge”  to keep commit history clean
 
-**After Merge**
-```test
+## 9 - After Merge
 git checkout main           # 1 - Switch to main
 git pull origin main        # 2 - Get the latest code after merge
-# (Optional) delete your old branch locally or on GitHub to stay clean
 ```
 
 # Testing
