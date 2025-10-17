@@ -1,49 +1,62 @@
-// test_displayDashboard.js
+// test_displayDashboard_manual.js
 // Dev: Gakuo Kairu
 // Feature: SharedWorkspaceDashboard
 // Function: displayDashboard(userID)
 
-// STRUCTURE OF TEST CASES TO FOLLOW:
-// describe() = folder for a group of related tests (here it’s one function).
-// test() = an individual test scenario.
-// expect() = what we think the result should be.
-// Each test covers one of the 4 main categories -> correct, incorrect, boundary, edge
+// import your function to test here (change the path to your file)
+const { displayDashboard } = require("../../frontend/src/components/Workspace.js");
+
+// ---------------- TESTS ---------------- //
+
+// 1- Correct Case
+console.log("---- Correct Case ----");
+let result = displayDashboard(101);
+if (result === "Dashboard Loaded") {
+  console.log("PASS ✅  Expected: 'Dashboard Loaded' | Got:", result);
+} else {
+  console.log("FAIL ❌  Expected: 'Dashboard Loaded' | Got:", result);
+}
+console.log(""); // space for readability
+
+// 2- Incorrect Case
+console.log("---- Incorrect Case ----");
+result = displayDashboard(-1);
+if (result === "Error: Invalid user") {
+  console.log("PASS ✅  Expected: 'Error: Invalid user' | Got:", result);
+} else {
+  console.log("FAIL ❌  Expected: 'Error: Invalid user' | Got:", result);
+}
+console.log("");
+
+// 3 - Boundary Case
+console.log("---- Boundary Case ----");
+result = displayDashboard(1);
+if (result === "Dashboard Loaded") {
+  console.log("PASS ✅  Expected: 'Dashboard Loaded' | Got:", result);
+} else {
+  console.log("FAIL ❌  Expected: 'Dashboard Loaded' | Got:", result);
+}
+console.log("");
+
+// 4 - Edge Case
+console.log("---- Edge Case ----");
+result = displayDashboard(null);
+if (result === "Error: Invalid user") {
+  console.log("PASS ✅  Expected: 'Error: Invalid user' | Got:", result);
+} else {
+  console.log("FAIL ❌  Expected: 'Error: Invalid user' | Got:", result);
+}
+console.log("");
+
+// ---------------- END ---------------- //
+console.log("All tests complete ✅");
 
 
 
-// this imports the function we’re testing from our actual code
-import { displayDashboard } from "../../frontend/src/components/Workspace.js";
-
-// describe() groups the 4 tests needed (Equivalent Partitions) for one function or feature
-describe("displayDashboard(userID)", () => {
-
-  // 1- Correct case → what should happen when everything's valid
-  test("loads dashboard for a valid user", () => {
-    // input → passing a real user id
-    const result = displayDashboard(101);
-    // check → does it show the right thing?
-    expect(result).toBe("Dashboard Loaded");
-  });
-
-  // 2- Incorrect case → test when something's wrong with the input
-  test("shows error for invalid user ID", () => {
-    const result = displayDashboard(-1);
-    // we expect an error message or failed response
-    expect(result).toBe("Error: Invalid user");
-  });
-
-  // 3- Boundary case → test the edge of what’s still valid
-  test("works fine for the lowest valid user ID (1)", () => {
-    const result = displayDashboard(1);
-    // still should load normally
-    expect(result).toBe("Dashboard Loaded");
-  });
-
-  // 4-  Edge case → weird or unexpected inputs
-  test("handles null userID gracefully", () => {
-    const result = displayDashboard(null);
-    // should not crash, should give an error message
-    expect(result).toBe("Error: Invalid user");
-  });
-
-});
+// ----------HOW TO RUN TEST ----------//
+// 1 - Open terminal
+// 2 - Move to this test file's folder
+//      cd tests/sharedWorkspaceDashboard
+// 3 - Run the file with Node:
+//      node test_displayDashboard.js
+// 4 - Check the console for PASS / FAIL results
