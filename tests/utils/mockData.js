@@ -1,20 +1,22 @@
 // Shared Mock Data for Tests (single source of truth)
-// Use these across all test files to keep shapes consistent.
+// Used across all test files to keep data shapes consistent.
 
+// ---------- USERS ----------
 export const mockUsers = {
+  // Students
   student1: {
-    id: "u_001",
+    id: 1,
     name: "John Doe",
     email: "john.doe@university.edu",
     role: "student",
     courses: ["CS3203", "MATH101"],
     notes: ["Needs help with trees"],
     sessions: [
-      { date: "2025-10-10T14:00:00Z", tutorId: "u_003", topic: "Binary Trees" }
+      { date: "2025-10-10T14:00:00Z", tutorId: 8, topic: "Binary Trees" }
     ]
   },
   student2: {
-    id: "u_002",
+    id: 2,
     name: "Jane Smith",
     email: "jane.smith@university.edu",
     role: "student",
@@ -22,8 +24,37 @@ export const mockUsers = {
     notes: [],
     sessions: []
   },
-  tutor: {
-    id: "u_003",
+  student3: {
+    id: 3,
+    name: "Carlos Rivera",
+    email: "carlos.rivera@university.edu",
+    role: "student",
+    courses: ["CS3203", "ENGL102"],
+    notes: ["Prefers group study"],
+    sessions: []
+  },
+  student4: {
+    id: 4,
+    name: "Ava Lee",
+    email: "ava.lee@university.edu",
+    role: "student",
+    courses: ["MATH101"],
+    notes: [],
+    sessions: []
+  },
+  student5: {
+    id: 5,
+    name: "Liam Patel",
+    email: "liam.patel@university.edu",
+    role: "student",
+    courses: ["CS3203", "HIST210"],
+    notes: [],
+    sessions: []
+  },
+
+  // Tutors
+  tutor1: {
+    id: 6,
     name: "Dr. Johnson",
     email: "dr.johnson@university.edu",
     role: "tutor",
@@ -31,23 +62,60 @@ export const mockUsers = {
     notes: [],
     sessions: []
   },
+  tutor2: {
+    id: 7,
+    name: "Dr. Green",
+    email: "dr.green@university.edu",
+    role: "tutor",
+    courses: ["MATH101"],
+    notes: [],
+    sessions: []
+  },
+  tutor3: {
+    id: 8,
+    name: "Prof. Miller",
+    email: "prof.miller@university.edu",
+    role: "tutor",
+    courses: ["PHYS201"],
+    notes: [],
+    sessions: []
+  },
+  tutor4: {
+    id: 9,
+    name: "Dr. Carter",
+    email: "dr.carter@university.edu",
+    role: "tutor",
+    courses: ["ENGL102"],
+    notes: [],
+    sessions: []
+  },
+  tutor5: {
+    id: 10,
+    name: "Dr. Patel",
+    email: "dr.patel@university.edu",
+    role: "tutor",
+    courses: ["HIST210"],
+    notes: [],
+    sessions: []
+  },
+
   // Edge users for validation tests
   emptyName: {
-    id: "u_004",
+    id: 11,
     name: "",
     email: "empty.name@university.edu",
     role: "student",
     courses: []
   },
   emojiName: {
-    id: "u_005",
+    id: 12,
     name: "🧠🔥",
     email: "emoji@university.edu",
     role: "student",
     courses: ["CS3203"]
   },
   nullEmail: {
-    id: "u_006",
+    id: 13,
     name: "Null Email",
     email: null,
     role: "student",
@@ -55,6 +123,7 @@ export const mockUsers = {
   }
 };
 
+// ---------- ASSIGNMENTS ----------
 export const mockAssignments = [
   {
     id: "a_001",
@@ -62,7 +131,7 @@ export const mockAssignments = [
     course: "CS3203",
     dueDate: "2025-10-20T23:59:00Z",
     status: "pending",
-    studentId: "u_001",
+    studentId: 1,
     createdAt: "2025-10-01T12:00:00Z",
     completedAt: null
   },
@@ -72,37 +141,38 @@ export const mockAssignments = [
     course: "CS3203",
     dueDate: "2025-10-05T23:59:00Z",
     status: "completed",
-    studentId: "u_002",
+    studentId: 2,
     createdAt: "2025-09-25T10:00:00Z",
     completedAt: "2025-10-03T15:30:00Z"
   },
-  // Invalid for negative tests (bad date + empty title)
+  // Invalid for negative tests
   {
     id: "a_bad",
     title: "",
     course: "CS3203",
     dueDate: "not-a-date",
     status: "pending",
-    studentId: "u_001",
+    studentId: 1,
     createdAt: "2025-10-01T12:00:00Z",
     completedAt: null
   }
 ];
 
+// ---------- WORKSPACES ----------
 export const mockWorkspaces = [
   {
     id: "ws_001",
     name: "CS3203 Study Group",
     description: "Collaborative workspace for Data Structures",
-    members: ["u_001", "u_002", "u_003"],
+    members: [1, 2, 6],
     createdAt: "2025-09-15T10:00:00Z",
     collaboratorList: [
-      { userId: "u_001", role: "member" },
-      { userId: "u_002", role: "member" },
-      { userId: "u_003", role: "tutor" }
+      { userId: 1, role: "member" },
+      { userId: 2, role: "member" },
+      { userId: 6, role: "tutor" }
     ]
   },
-  // Edge: workspace with no members
+  // Edge workspace: no members
   {
     id: "ws_empty",
     name: "Empty Workspace",
@@ -113,13 +183,14 @@ export const mockWorkspaces = [
   }
 ];
 
-// Tasks to support fetchUserTasks(userId) and dashboard counts
+// ---------- TASKS ----------
 export const mockTasks = [
-  { id: "t_001", userId: "u_001", title: "Review Trees", status: "open", updatedAt: "2025-10-12T09:00:00Z" },
-  { id: "t_002", userId: "u_001", title: "Finish Assignment a_001", status: "open", updatedAt: "2025-10-13T14:15:00Z" },
-  { id: "t_003", userId: "u_002", title: "Study Sorting", status: "done", updatedAt: "2025-10-08T18:30:00Z" }
+  { id: "t_001", userId: 1, title: "Review Trees", status: "open", updatedAt: "2025-10-12T09:00:00Z" },
+  { id: "t_002", userId: 1, title: "Finish Assignment a_001", status: "open", updatedAt: "2025-10-13T14:15:00Z" },
+  { id: "t_003", userId: 2, title: "Study Sorting", status: "done", updatedAt: "2025-10-08T18:30:00Z" }
 ];
 
+// ---------- PRACTICE PROBLEMS ----------
 export const mockPracticeProblems = [
   {
     id: "pp_001",
@@ -128,9 +199,8 @@ export const mockPracticeProblems = [
     course: "CS3203",
     description: "Implement inorder, preorder, and postorder traversal",
     assignmentSent: false,
-    sentTo: [] // e.g., ["u_001"]
+    sentTo: []
   },
-  // Edge: max length title, odd difficulty
   {
     id: "pp_long",
     title: "X".repeat(128),
