@@ -4,13 +4,13 @@
 // Function: displayDashboard(userID)
 
 // import your function to test here (change the path to your file)
-const { displayDashboard } = require("../../backend/src/features/shared-workspace-dashboard/sharedWorkspaceController.js");
+import { displayDashboard } from "../../backend/src/features/shared-workspace-dashboard/sharedWorkspaceController.js";
 
 // ---------------- TESTS ---------------- //
 
 // 1- Correct Case
 console.log("---- Correct Case ----");
-let result = displayDashboard(101);
+let result = displayDashboard(2);
 if (result === "Dashboard Loaded") {
   console.log("PASS ✅  Expected: 'Dashboard Loaded' | Got:", result);
 } else {
