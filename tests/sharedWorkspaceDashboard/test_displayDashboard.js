@@ -4,7 +4,7 @@
 // Function: displayDashboard(userID)
 
 // import your function to test here (change the path to your file)
-const { displayDashboard } = require("../../backend/src/features/shared-worskspace-dashboard/sharedWorkspaceController.js");
+const { displayDashboard } = require("../../backend/src/features/shared-workspace-dashboard/sharedWorkspaceController.js");
 
 // ---------------- TESTS ---------------- //
 
