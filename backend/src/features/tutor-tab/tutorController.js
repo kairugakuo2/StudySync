@@ -10,7 +10,7 @@ function normalizeName(raw) {
     let name = raw.trim();
     if (name.length === 0) throw new Error('name cannot be empty');
     if (name.length > NAME_MAX) throw new Error('name too long');
-    if (!/^[A-Za-z' -]+$/.test(name)) throw new Error('name has invalid character');
+    if (!/^[A-Za-z' -]+$/.test(name)) throw new Error('name has invalid characters');
     name = name.replace(/\s+/g, ' ');
     return name
 }
@@ -70,7 +70,7 @@ exports.createNote = (req, res) => {
     const note = addNoteLogic(req.params.studentId, req.body || {});
     res.status(201).json(note);
 };
-eports.listNotes = (req, res) => {
+exports.listNotes = (req, res) => {
     res.json(listNotesLogic(req.params.studentId));
 };
 

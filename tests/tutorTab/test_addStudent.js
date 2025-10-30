@@ -3,7 +3,7 @@
 // Feature: TutorTab
 // Funciton: addStudent(name)
 
-const { addStudent, getStudents, resetStudents } = require("../../backend/src/features/tutor-tab/tutorController.js")
+const { addStudent, getStudents, resetStudents } = require('../src/features/tutor-tab/tutorController')
 
 beforeEach(() => resetStudents());
 
