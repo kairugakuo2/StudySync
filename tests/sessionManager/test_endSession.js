@@ -1,5 +1,6 @@
 // Test endSession
-console.log('--- Testing endSession ---');
+import createSession from '../../../backend/src/features/sessionManager/sessionManager.js'
+console.log('Testing endSession');
 
 function assert(condition, message) {
   if (condition) console.log('✅ PASS:', message);
