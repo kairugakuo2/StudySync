@@ -11,7 +11,7 @@ const session = createSession({
   title: 'End Test',
   startTime: new Date(Date.now() + 3600000).toISOString(),
   endTime: new Date(Date.now() + 7200000).toISOString(),
-  participants: ['Alice', 'ZUN']
+  participants: ['9Lana', 'Ado']
 }).session;
 
 // Normal case
