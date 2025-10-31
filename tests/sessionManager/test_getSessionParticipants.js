@@ -16,7 +16,7 @@ const session = createSession({
 try {
   const participants = getSessionParticipants(session.id);
   assert(participants.count === 2, 'getSessionParticipants returns correct count');
-  assert(participants.participants.includes('Alice', 'ZUN'), 'getSessionParticipants includes correct participants');
+  assert(participants.participants.includes('ZUN') & participants.participants.includes('Tanuki'), 'getSessionParticipants includes correct participants');
 } catch (e) {
   assert(false, 'getSessionParticipants should not throw on valid session');
 }
