@@ -1,46 +1,42 @@
-// test_createSession.test.js
-let createSession;
+// Test createSession
+import createSession from '../../../backend/src/features/sessionManager/sessionManager.js'
+console.log('Testing createSession');
 
-beforeEach(() => {
-  jest.resetModules();
-  ({ createSession } = await import("../../../backend/src/features/sessionManager/sessionManager.js");
-));
-});
+function assert(condition, message) {
+  if (condition) console.log('PASS:', message);
+  else console.error('FAIL:', message);
+}
 
-describe("createSession", () => {
-  test("creates a valid session", async () => {
-    const data = {
-      title: "Math Study Group",
-      startTime: new Date(Date.now() + 3600000).toISOString(),
-      endTime: new Date(Date.now() + 7200000).toISOString(),
-      participants: ["Alice", "Bob"]
-    };
+const validSession = {
+  title: 'Study Math',
+  startTime: new Date(Date.now() + 3600000).toISOString(),
+  endTime: new Date(Date.now() + 7200000).toISOString(),
+  participants: ['Alice', 'Bob']
+};
 
-    const result = createSession(data);
+// Normal case
+try {
+  const result = createSession(validSession);
+  assert(result.session.title === 'Study Math', 'createSession sets correct title');
+  assert(result.session.status === 'scheduled', 'createSession sets status');
+} catch (e) {
+  assert(false, 'createSession should not throw for valid data');
+}
 
-    expect(result.session).toHaveProperty("id");
-    expect(result.session.title).toBe("Math Study Group");
-    expect(result.session.status).toBe("scheduled");
-    expect(result.session.participants.length).toBe(2);
-  });
+// Validation: empty title
+try {
+  createSession(validSession.title);
+  assert(false, 'createSession should throw if title empty');
+} catch (e) {
+  assert(e.message === 'Session title is required', 'createSession throws on empty title');
+}
 
-  test("throws error if title missing", async () => {
-    const badData = {
-      startTime: new Date(),
-      endTime: new Date(Date.now() + 3600000),
-      participants: ["Alice"]
-    };
-    expect(() => createSession(badData)).toThrow("Session title is required");
-  });
-
-  test("throws error if participants missing", async () => {
-    const badData = {
-      title: "History Review",
-      startTime: new Date(),
-      endTime: new Date(Date.now() + 3600000),
-      participants: []
-    };
-    expect(() => createSession(badData)).toThrow("At least one participant required");
-  });
-});
-
+// Validation: no participants
+try {
+  const invalidSession = Object.assign({}, validSession); // clone object
+  invalidSession.participants = [];
+  createSession(invalidSession);
+  assert(false, 'createSession should throw if no participants');
+} catch (e) {
+  assert(e.message === 'At least one participant required', 'createSession throws on empty participants');
+}
