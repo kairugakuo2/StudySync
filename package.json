@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "studysync-backend",
   "version": "1.0.0",
   "description": "Minimal Express backend for StudySync (Sprint 1)",
