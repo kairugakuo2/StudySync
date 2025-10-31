@@ -1,4 +1,5 @@
 // Test getUpcomingSessions
+import createSession from '../../../backend/src/features/sessionManager/sessionManager.js'
 console.log('Testing getUpcomingSessions');
 
 function assert(condition, message) {
