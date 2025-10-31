@@ -1,4 +1,5 @@
 // Test getSessionParticipants
+import createSession from '../../../backend/src/features/sessionManager/sessionManager.js'
 console.log('Testing getSessionParticipants');
 
 function assert(condition, message) {
