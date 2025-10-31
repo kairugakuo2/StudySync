@@ -11,7 +11,7 @@ const validSession = {
   title: 'Study Math',
   startTime: new Date(Date.now() + 3600000).toISOString(),
   endTime: new Date(Date.now() + 7200000).toISOString(),
-  participants: ['Alice', 'Bob']
+  participants: ['Dasu', 'Camellia']
 };
 
 // Normal case
