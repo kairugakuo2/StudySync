@@ -3,7 +3,8 @@ let createSession;
 
 beforeEach(() => {
   jest.resetModules();
-  ({ createSession } = await import("../sessionManagerController.js"));
+  ({ createSession } = await import("../../../backend/src/features/sessionManager/sessionManager.js");
+));
 });
 
 describe("createSession", () => {
