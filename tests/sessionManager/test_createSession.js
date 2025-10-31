@@ -13,7 +13,7 @@ const validSession = {
   endTime: new Date(Date.now() + 7200000).toISOString(),
   participants: ['Dasu', 'Camellia']
 };
-
+ 
 // Normal case
 try {
   const result = createSession(validSession);
