@@ -3,8 +3,8 @@ import createSession from '../../../backend/src/features/sessionManager/sessionM
 console.log('Testing endSession');
 
 function assert(condition, message) {
-  if (condition) console.log('✅ PASS:', message);
-  else console.error('❌ FAIL:', message);
+  if (condition) console.log('PASS:', message);
+  else console.error('FAIL:', message);
 }
 
 const session = createSession({
