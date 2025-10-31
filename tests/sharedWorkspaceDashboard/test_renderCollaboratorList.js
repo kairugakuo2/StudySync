@@ -3,7 +3,7 @@
 // Feature: SharedWorkspaceDashboard
 // Function: renderCollaboratorList(workspaceId)
 
-// import your function to test here (change the path to your file)
+// function to test
 import { renderCollaboratorList } from "../../backend/src/features/shared-workspace-dashboard/sharedWorkspaceController.js";
 
 // ---------------- TESTS ---------------- //

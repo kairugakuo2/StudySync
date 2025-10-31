@@ -3,7 +3,7 @@
 // Feature: SharedWorkspaceDashboard
 // Function: updateWorkspaceView(userID, workspaceId)
 
-// import your function to test here (change the path to your file)
+// function to test
 import { updateWorkspaceView } from "../../backend/src/features/shared-workspace-dashboard/sharedWorkspaceController.js";
 
 // ---------------- TESTS ---------------- //

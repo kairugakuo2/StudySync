@@ -3,7 +3,7 @@
 // Feature: SharedWorkspaceDashboard
 // Function: displayDashboard(userID)
 
-// import your function to test here (change the path to your file)
+// function to test
 import { displayDashboard } from "../../backend/src/features/shared-workspace-dashboard/sharedWorkspaceController.js";
 
 // ---------------- TESTS ---------------- //
@@ -16,7 +16,7 @@ if (result.message === "Dashboard Loaded") {
 } else {
   console.log("FAIL ❌  Expected: 'Dashboard Loaded' | Got:", result.message);
 }
-console.log(""); // space for readability
+console.log("Specifics:\n", result, "\n")
 
 // 2- Incorrect Case
 console.log("---- Incorrect Case ----");
@@ -26,7 +26,7 @@ if (result.message === "Error: Invalid user") {
 } else {
   console.log("FAIL ❌  Expected: 'Error: Invalid user' | Got:", result.message);
 }
-console.log("");
+console.log("Specifics:\n", result, "\n")
 
 // 3 - Boundary Case
 console.log("---- Boundary Case ----");
@@ -36,7 +36,7 @@ if (result.message === "Dashboard Loaded") {
 } else {
   console.log("FAIL ❌  Expected: 'Dashboard Loaded' | Got:", result.message);
 }
-console.log("");
+console.log("Specifics:\n", result, "\n")
 
 // 4 - Edge Case
 console.log("---- Edge Case ----");
@@ -46,7 +46,7 @@ if (result.message === "Error: Invalid user") {
 } else {
   console.log("FAIL ❌  Expected: 'Error: Invalid user' | Got:", result.message);
 }
-console.log("");
+console.log("Specifics:\n", result, "\n")
 
 // ---------------- END ---------------- //
 console.log("All tests complete ✅");
