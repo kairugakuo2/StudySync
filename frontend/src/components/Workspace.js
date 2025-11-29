@@ -3,6 +3,8 @@
 // Feature: Practice Problems
 // Function: assignWork(assignment_Name)
 
+const {assignWork} = require("../../frontend/src/components/Workspace.js");
+
 // TEST //
 
 const readline = require('readline');
@@ -66,6 +68,8 @@ rl.question('Enter assignment name to assign: ', (answer) => {
 // Dev: Ridwan Durosimi
 // Feature: Practice Problems
 // Function: studentSelect(name)
+
+const {studentSelect} = require("../../frontend/src/components/Workspace.js");
 
 // TEST //
 
@@ -132,6 +136,8 @@ module.exports = { selectedStudent, studentResults };
 // Dev: Ridwan Durosimi
 // Feature: Practice Problems
 // Function: sendAssignment()
+
+const {sendAssignment} = require("../../frontend/src/components/Workspace.js");
 
 // TEST //
 
