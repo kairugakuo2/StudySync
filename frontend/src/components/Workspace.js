@@ -75,7 +75,7 @@ const {studentSelect} = require("../../frontend/src/components/Workspace.js");
 
 const readline = require('readline');
 const register = ["Alice", "Bob", "Charlie", "Diana"];
-const onlyLetters = /^[A-Za-z]+$/;
+const onlyLetters2 = /^[A-Za-z]+$/;
 
 let selectedStudent = "";
 const studentResults = [];
@@ -115,7 +115,7 @@ function test_studentSelect(input) {
     }
 
     // Case 4 (Edge)
-    if (typeof input === 'string' && (input.length < 0 || !onlyLetters.test(input))) {
+    if (typeof input === 'string' && (input.length < 0 || !onlyLetters2.test(input))) {
         studentResults.push("FAIL 4"); // Input contains a non-letter or has negative length")
         console.log("\nFAIL 4");
     } else {
@@ -124,10 +124,10 @@ function test_studentSelect(input) {
     }
 }
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-rl.question('Enter a student name to test: ', (answer) => {
+const rl2 = readline.createInterface({ input: process.stdin, output: process.stdout });
+rl2.question('Enter a student name to test: ', (answer) => {
     test_studentSelect(answer.trim());
-    rl.close();
+    rl2.close();
 });
 
 module.exports = { selectedStudent, studentResults };
