@@ -1,0 +1,31 @@
+// Test getSessionParticipants
+import createSession from '../../../backend/src/features/sessionManager/sessionManager.js'
+console.log('Testing getSessionParticipants');
+
+function assert(condition, message) {
+  if (condition) console.log('PASS:', message);
+  else console.error('FAIL:', message);
+}
+
+const session = createSession({
+  title: 'participantsTest',
+  startTime: new Date(Date.now() + 3600000).toISOString(),
+  endTime: new Date(Date.now() + 7200000).toISOString(),
+  participants: ['ZUN', 'Tanuki']
+})
+// Normal case
+try {
+  const participants = getSessionParticipants(session.id);
+  assert(participants.count === 2, 'getSessionParticipants returns correct count');
+  assert(participants.participants.includes('ZUN') & participants.participants.includes('Tanuki'), 'getSessionParticipants includes correct participants');
+} catch (e) {
+  assert(false, 'getSessionParticipants should not throw on valid session');
+}
+
+// Error: non-existent session
+try {
+  getSessionParticipants('fake-id');
+  assert(false, 'getSessionParticipants should throw if session not found');
+} catch (e) {
+  assert(e.message === 'Session not found', 'getSessionParticipants throws on non-existent session');
+}

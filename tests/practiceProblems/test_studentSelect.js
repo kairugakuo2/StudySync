@@ -8,53 +8,60 @@ const {studentSelect} = require("../../frontend/src/components/Workspace.js");
 // TEST //
 
 const readline = require('readline');
+const register = ["Alice", "Bob", "Charlie", "Diana"];
+const onlyLetters = /^[A-Za-z]+$/;
 
-function studentSelect(name) { // Checks if inputed name is in the register
-    const register = ["Alice", "Bob", "Charlie", "Diana"]; // Example register of names
+let selectedStudent = "";
+const studentResults = [];
+
+function studentSelect(name) {
     return register.includes(name);
 }
 
-function test_studentSelect(input) { // Main Test Function
-    const register = ["Alice", "Bob", "Charlie", "Diana"];
+function test_studentSelect(input) {
+    selectedStudent = input;
 
-    // Test Cases //
-
-    // Case 1 (Correct):
+    // Case 1 (Correct)
     if (typeof input === 'string' && register.includes(input)) {
-        console.log("PASS 1 - Name exists in register");
+        studentResults.push("PASS 1"); // Name exists in register
+        console.log("PASS 1");
     } else {
-        console.log("FAIL 1 - Name doesn't exist in register");
+        studentResults.push("FAIL 1"); // Name doesn't exist in register
+        console.log("FAIL 1");
     }
 
-    // Case 2 (Incorrect):
+    // Case 2 (Incorrect)
     if (typeof input === 'string' && !register.includes(input)) {
-        console.log("\nPASS 2 - Input doesn't match any names in register");
-    } else {
-        console.log("\nFAIL 2 - Input matches a name in register");
+        studentResults.push("PASS 2"); // Input doesn't match any names in register
+        console.log("\nPASS 2");
+    } else{
+        studentResults.push("FAIL 2"); // Input matches a name in register
+        console.log("\nFAIL 2");
     }
 
-    // Case 3 (Boundary):
+    // Case 3 (Boundary)
     if (typeof input === 'string' && input.length > 1) {
-        console.log("\nPASS 3 - Input is longer than 1 character");
+        studentResults.push("PASS 3"); // Input is longer than 1 character
+        console.log("\nPASS 3");
     } else {
-        console.log("\nFAIL 3 - Input must be longer than 1 character");
+        studentResults.push("FAIL 3"); // Input must be longer than 1 character
+        console.log("\nFAIL 3");
     }
 
-    // Case 4 (Edge):
-    const onlyLetters = /^[A-Za-z]+$/;
+    // Case 4 (Edge)
     if (typeof input === 'string' && (input.length < 0 || !onlyLetters.test(input))) {
-        console.log("\nFAIL 4 - Input either conatins a non-letter character or has negative length, and must be fixed");
+        studentResults.push("FAIL 4"); // Input contains a non-letter or has negative length")
+        console.log("\nFAIL 4");
     } else {
-        console.log("\nPASS 4 - Input contains only letters and has a positive character length" );
+        studentResults.push("PASS 4"); // Input contains only letters and has a positive character length
+        console.log("\nPASS 4");
     }
 }
 
-const rl = readline.createInterface({ // Connects Node's input & ouput, stores result in r1
-    input: process.stdin,
-    output: process.stdout
-});
-
-rl.question('Enter a student name to test: ', (answer) => { // Initial Text
-    test_studentSelect(answer.trim()); // Removes extra spaces before/after input
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+rl.question('Enter a student name to test: ', (answer) => {
+    test_studentSelect(answer.trim());
     rl.close();
 });
+
+module.exports = { selectedStudent, studentResults };

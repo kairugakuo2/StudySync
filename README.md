@@ -154,5 +154,28 @@ Each teammate writes and runs manual JavaScript tests for their individual featu
 - Boundary Case – input(s) at the lowest/highest valid limits still work
 - Edge Case – unexpected/unusual input(s) (null, empty string, etc.) still work
 
+## Reviewer: Unit Test Execution Steps
+1. Clone the assigned repository
+   ```bash
+   git clone <repo-url>
+   cd StudySync
+   ```
+2. Install prerequisites (Node.js ≥ 18 recommended)
+   - macOS users can use Homebrew: `brew install node`
+   - Verify: `node -v` (should be 18 or higher)
+3. Run a Unit Test from the `tests/` folder
+   - Navigate to the feature’s test directory and run a test file with Node:
+   ```bash
+   cd tests/<feature-folder>
+   node <test_file>.js
+   ```
+   - Example:
+   ```bash
+   cd tests/sharedWorkspaceDashboard
+   node test_displayDashboard.js
+   ```
+4. Verify Test Execution
+   - Confirm that the Unit Test runs successfully (look for PASS/expected output)
+
 # Contact
 - Team F - CS3203 Fall 2025 - University of Oklahoma
