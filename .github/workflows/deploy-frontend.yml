@@ -36,8 +36,7 @@ jobs:
       - name: Build
         working-directory: ./frontend
         run: npm run build
-        env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+        # VITE_API_URL not needed - app uses mock data when backend unavailable
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25

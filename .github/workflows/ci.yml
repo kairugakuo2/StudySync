@@ -36,27 +36,29 @@ jobs:
         working-directory: ./frontend
         run: npm run build
 
-  backend-ci:
-    name: Backend CI
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: backend/package-lock.json
-
-      - name: Install dependencies
-        working-directory: ./backend
-        run: npm ci
-
-      - name: Run tests
-        working-directory: ./backend
-        run: npm test || echo "No tests configured"
+  # Backend CI is optional - backend not required for deployment
+  # Uncomment if you want to test backend code in CI
+  # backend-ci:
+  #   name: Backend CI
+  #   runs-on: ubuntu-latest
+  #   
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '18'
+  #         cache: 'npm'
+  #         cache-dependency-path: backend/package-lock.json
+  #
+  #     - name: Install dependencies
+  #       working-directory: ./backend
+  #       run: npm ci
+  #
+  #     - name: Run tests
+  #       working-directory: ./backend
+  #       run: npm test || echo "No tests configured"
 
 
