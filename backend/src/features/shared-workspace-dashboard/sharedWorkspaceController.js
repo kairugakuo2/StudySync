@@ -1,5 +1,5 @@
 //storage
-import { mockUsers, mockAssignments, mockWorkspaces, mockTasks, mockWorkspaceTasks } from "../../../../tests/utils/mockData.js";
+import { mockUsers, mockAssignments, mockWorkspaces, mockTasks, mockWorkspaceTasks } from "../../utils/mockData.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
