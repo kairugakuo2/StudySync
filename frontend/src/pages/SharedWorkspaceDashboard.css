@@ -1,0 +1,137 @@
+.shared-workspace-dashboard {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.collaborator-list,
+.user-task-list,
+.workspace-preview {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.collaborator-list h3,
+.user-task-list h3,
+.workspace-preview h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+
+.collaborator-list p,
+.user-task-list p,
+.workspace-preview p {
+  color: #666;
+  margin: 0;
+}
+
+.loading-message,
+.error-message {
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+}
+
+.error-message {
+  color: #d32f2f;
+}
+
+.collaborator-items,
+.task-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.collaborator-item,
+.task-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.collaborator-item:last-child,
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.collaborator-role {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-title {
+  flex: 1;
+}
+
+.task-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.task-status-open {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.task-status-done {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.workspace-info {
+  margin-top: 1rem;
+}
+
+.workspace-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.workspace-status {
+  margin: 0.5rem 0;
+}
+
+.workspace-status-active {
+  color: #388e3c;
+}
+
+.workspace-status-idle {
+  color: #666;
+}
+
+.workspace-members {
+  margin: 0.5rem 0 0 0;
+  color: #666;
+}
+
