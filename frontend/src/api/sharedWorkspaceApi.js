@@ -1,23 +1,13 @@
 const API_BASE_URL = 'http://localhost:3000';
 
-// Mock data fallbacks
-const mockCollaborators = [
-  { userId: 1, name: "John Doe", role: "member" },
-  { userId: 2, name: "Jane Smith", role: "member" },
-  { userId: 6, name: "Dr. Johnson", role: "tutor" }
-];
-
-const mockTasks = [
-  { id: "t_001", title: "Review Trees", status: "open" },
-  { id: "t_002", title: "Finish Assignment a_001", status: "open" }
-];
-
-const mockWorkspaceState = {
-  id: "ws_001",
-  name: "CS3203 Study Group",
-  status: "active",
-  memberCount: 3
-};
+// Import shared mock data
+import { 
+  mockCollaborators, 
+  mockWorkspaceTasks as mockTasks, 
+  mockWorkspaceState, 
+  mockUpcomingSession, 
+  mockActivity 
+} from '../../../tests/utils/mockData.js';
 
 /**
  * Fetches collaborators for a workspace
@@ -43,6 +33,48 @@ export async function getCollaborators(workspaceId = "ws_001") {
   } catch (error) {
     console.warn('Failed to fetch collaborators, using mock data:', error);
     return mockCollaborators;
+  }
+}
+
+/**
+ * Fetches upcoming session data
+ * @returns {Promise<Object>} Upcoming session object
+ */
+export async function getUpcomingSession() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/upcoming-session`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    if (data.message && data.message.includes("Error")) {
+      throw new Error(data.message);
+    }
+    return data.session || mockUpcomingSession;
+  } catch (error) {
+    console.warn('Failed to fetch upcoming session, using mock data:', error);
+    return mockUpcomingSession;
+  }
+}
+
+/**
+ * Fetches recent activity feed
+ * @returns {Promise<Array>} Array of activity items
+ */
+export async function getRecentActivity() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/activity`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    if (data.message && data.message.includes("Error")) {
+      throw new Error(data.message);
+    }
+    return data.activity || mockActivity;
+  } catch (error) {
+    console.warn('Failed to fetch activity, using mock data:', error);
+    return mockActivity;
   }
 }
 
@@ -108,6 +140,39 @@ export async function getWorkspaceState(userId = 1, workspaceId = "ws_001") {
   } catch (error) {
     console.warn('Failed to fetch workspace state, using mock data:', error);
     return mockWorkspaceState;
+  }
+}
+
+/**
+ * Adds a new task and saves to mock data file
+ * @param {Object} task - Task object { id, title, status, due }
+ * @returns {Promise<Object>} Created task object
+ */
+export async function addTask(task) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/tasks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(task)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.message && data.message.includes("Error")) {
+      throw new Error(data.message);
+    }
+
+    return data.task || task;
+  } catch (error) {
+    console.warn('Failed to save task to backend, task added locally only:', error);
+    // Task is already added to local state, so we just log the warning
+    return task;
   }
 }
 

@@ -4,6 +4,7 @@ import AssignmentTracker from './pages/AssignmentTracker';
 import PracticeProblems from './pages/PracticeProblems';
 import SessionManager from './pages/SessionManager';
 import SharedWorkspaceDashboard from './pages/SharedWorkspaceDashboard';
+import Workspace from './pages/Workspace';
 import TutorTab from './pages/TutorTab';
 import './App.css';
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/practice-problems" element={<PracticeProblems />} />
           <Route path="/session-manager" element={<SessionManager />} />
           <Route path="/workspace-dashboard" element={<SharedWorkspaceDashboard />} />
+          <Route path="/workspace/:workspaceId" element={<Workspace />} />
           <Route path="/tutor-tab" element={<TutorTab />} />
         </Routes>
       </RootLayout>
