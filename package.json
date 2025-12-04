@@ -1,29 +1,21 @@
 {
-  "type": "module",
-  "name": "studysync-backend",
+  "name": "studysync",
   "version": "1.0.0",
-  "description": "Minimal Express backend for StudySync (Sprint 1)",
-  "main": "src/app.js",
-  "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
-    "test": "jest --runInBand"
-  },
-  "keywords": [
-    "studysync",
-    "express",
+  "description": "Collaborative study tool for college students",
+  "private": true,
+  "workspaces": [
+    "frontend",
     "backend"
   ],
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "install:all": "cd frontend && npm install && cd ../backend && npm install"
+  },
   "author": "Team F - CS3203 Fall 2025",
   "license": "MIT",
   "engines": {
     "node": ">=18"
-  },
-  "dependencies": {
-    "express": "^4.19.2"
-  },
-  "devDependencies": {
-    "jest": "^30.2.0",
-    "nodemon": "^3.1.0"
   }
 }
