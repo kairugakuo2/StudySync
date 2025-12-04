@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { useSharedWorkspace } from '../hooks/useSharedWorkspace';
+import { useSharedWorkspace } from '../../hooks/useSharedWorkspace';
 import './Workspace.css';
 
 export default function Workspace() {

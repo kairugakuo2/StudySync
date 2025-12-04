@@ -176,3 +176,37 @@ export async function addTask(task) {
   }
 }
 
+/**
+ * Updates an existing task and saves to mock data file
+ * @param {string|number} taskId - The task ID to update
+ * @param {Object} taskData - Updated task object { status, inProgressBy, doneBy, ... }
+ * @returns {Promise<Object>} Updated task object
+ */
+export async function updateTask(taskId, taskData) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/tasks/${taskId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(taskData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.message && data.message.includes("Error")) {
+      throw new Error(data.message);
+    }
+
+    return data.task || taskData;
+  } catch (error) {
+    console.warn('Failed to save task update to backend, task updated locally only:', error);
+    // Task is already updated in local state, so we just log the warning
+    return taskData;
+  }
+}
+

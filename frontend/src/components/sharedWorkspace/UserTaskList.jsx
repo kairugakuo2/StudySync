@@ -1,8 +1,11 @@
 import { useState } from 'react';
 
-export default function UserTaskList({ tasks = [], markTaskComplete, addTask }) {
+export default function UserTaskList({ tasks = [], markTaskComplete, addTask, updateTask, deleteTask }) {
   const [sortBy, setSortBy] = useState('default');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [editedTask, setEditedTask] = useState(null);
   const [newTask, setNewTask] = useState({
     title: '',
     due: '',
@@ -78,7 +81,60 @@ export default function UserTaskList({ tasks = [], markTaskComplete, addTask }) 
     }
   };
 
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+    // Format due date for input field (YYYY-MM-DD)
+    const dueDate = task.due ? new Date(task.due).toISOString().split('T')[0] : '';
+    setEditedTask({
+      ...task,
+      due: dueDate
+    });
+    setShowEditModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setSelectedTask(null);
+    setEditedTask(null);
+  };
+
+  const handleEditBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleCloseEditModal();
+    }
+  };
+
+  const handleSaveTask = (e) => {
+    e.preventDefault();
+    if (!editedTask.title.trim()) {
+      alert('Please enter a task title');
+      return;
+    }
+
+    const updatedTask = {
+      ...editedTask,
+      title: editedTask.title.trim(),
+      due: editedTask.due ? new Date(editedTask.due).toISOString() : null
+    };
+
+    if (updateTask) {
+      updateTask(selectedTask.id, updatedTask);
+    }
+    handleCloseEditModal();
+  };
+
+  const handleDeleteTask = () => {
+    if (window.confirm(`Are you sure you want to delete "${selectedTask.title}"?`)) {
+      if (deleteTask) {
+        deleteTask(selectedTask.id);
+      }
+      handleCloseEditModal();
+    }
+  };
+
+
   return (
+    <>
     <div className="user-task-list">
       <div className="task-list-header">
         <h3>User Tasks</h3>
@@ -110,12 +166,22 @@ export default function UserTaskList({ tasks = [], markTaskComplete, addTask }) 
           {sortedTasks.map((task) => {
             const isCompleted = task.status === 'done';
             return (
-                  <li key={task.id} className={`task-item ${isCompleted ? 'completed' : ''} ${task.status === 'done' ? 'task-done' : ''}`}>
+                  <li 
+                    key={task.id} 
+                    className={`task-item ${isCompleted ? 'completed' : ''} ${task.status === 'done' ? 'task-done' : ''} clickable-task`}
+                    onClick={() => handleTaskClick(task)}
+                  >
                 <div className="task-content">
                   <div className="task-title-wrapper">
                     <span className="task-title">{task.title}</span>
                     {task.due && (
                       <span className="task-due-date">Due: {formatDueDate(task.due)}</span>
+                    )}
+                    {task.status === 'in-progress' && task.inProgressBy && (
+                      <span className="task-attribution">In Progress by: {task.inProgressBy.name}</span>
+                    )}
+                    {task.status === 'done' && task.doneBy && (
+                      <span className="task-attribution">Done by: {task.doneBy.name}</span>
                     )}
                   </div>
                   <span className={`task-status-pill task-status-${task.status}`}>
@@ -201,7 +267,108 @@ export default function UserTaskList({ tasks = [], markTaskComplete, addTask }) 
           </div>
         </div>
       )}
+
     </div>
+
+    {showEditModal && selectedTask && editedTask && (
+      <div className="task-modal-overlay" onClick={handleEditBackdropClick}>
+        <div className="task-modal task-edit-modal">
+          <button 
+            className="task-modal-close"
+            onClick={handleCloseEditModal}
+            type="button"
+            aria-label="Close"
+          >
+            ×
+          </button>
+          <h3>Edit Task</h3>
+          <p className="task-modal-note">Changes are saved to local state only.</p>
+          
+          <form onSubmit={handleSaveTask} className="task-form">
+            <div className="form-group">
+              <label htmlFor="edit-task-title">Task Title *</label>
+              <input
+                id="edit-task-title"
+                type="text"
+                value={editedTask.title}
+                onChange={(e) => setEditedTask({ ...editedTask, title: e.target.value })}
+                placeholder="Enter task title"
+                required
+                autoFocus
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="edit-task-due">Due Date</label>
+              <input
+                id="edit-task-due"
+                type="date"
+                value={editedTask.due || ''}
+                onChange={(e) => setEditedTask({ ...editedTask, due: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="edit-task-status">Status</label>
+              <select
+                id="edit-task-status"
+                value={editedTask.status}
+                onChange={(e) => setEditedTask({ ...editedTask, status: e.target.value })}
+              >
+                <option value="open">Open</option>
+                <option value="in-progress">In Progress</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+
+            {/* Task Info Display */}
+            <div className="task-info-section">
+              <div className="task-info-compact">
+                <div className="task-info-row">
+                  <span className="info-label">Task ID:</span>
+                  <span className="info-value">{selectedTask.id}</span>
+                </div>
+                {selectedTask.due && (
+                  <div className="task-info-row">
+                    <span className="info-label">Due Date:</span>
+                    <span className="info-value">{formatDueDate(selectedTask.due)}</span>
+                  </div>
+                )}
+                {selectedTask.inProgressBy && (
+                  <div className="task-info-row">
+                    <span className="info-label">In Progress by:</span>
+                    <span className="info-value">{selectedTask.inProgressBy.name}</span>
+                  </div>
+                )}
+                {selectedTask.doneBy && (
+                  <div className="task-info-row">
+                    <span className="info-label">Done by:</span>
+                    <span className="info-value">{selectedTask.doneBy.name}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="form-actions">
+              <button 
+                type="button" 
+                onClick={handleDeleteTask} 
+                className="delete-btn"
+              >
+                Delete Task
+              </button>
+              <div className="form-actions-right">
+                <button type="button" onClick={handleCloseEditModal} className="cancel-btn">
+                  Cancel
+                </button>
+                <button type="submit" className="submit-btn">
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
 

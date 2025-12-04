@@ -1,14 +1,14 @@
-import { useSharedWorkspace } from '../hooks/useSharedWorkspace';
-import CollaboratorList from '../components/sharedWorkspace/CollaboratorList';
-import UserTaskList from '../components/sharedWorkspace/UserTaskList';
-import WorkspacePreview from '../components/sharedWorkspace/WorkspacePreview';
-import { mockUsers } from '../../../tests/utils/mockData';
+import { useSharedWorkspace } from '../../hooks/useSharedWorkspace';
+import CollaboratorList from '../../components/sharedWorkspace/CollaboratorList';
+import UserTaskList from '../../components/sharedWorkspace/UserTaskList';
+import WorkspacePreview from '../../components/sharedWorkspace/WorkspacePreview';
+import { mockUsers } from '../../../../tests/utils/mockData';
 import './SharedWorkspaceDashboard.css';
 
 export default function SharedWorkspaceDashboard() {
   const currentUserId = localStorage.getItem('currentUserId');
   const currentUser = currentUserId ? mockUsers[currentUserId] : null;
-  const { collaborators, tasks, workspace, upcomingSession, activity, loading, error, markTaskComplete, addTask } = useSharedWorkspace();
+  const { collaborators, tasks, workspace, upcomingSession, activity, loading, error, markTaskComplete, addTask, updateTask, deleteTask } = useSharedWorkspace();
   
   // Filter tasks for current user (if tasks have userId field)
   const userTasks = currentUser && tasks.length > 0 && tasks[0].userId !== undefined
@@ -48,7 +48,13 @@ export default function SharedWorkspaceDashboard() {
       
       <div className="dashboard-top-row">
         <CollaboratorList collaborators={collaborators} currentUserId={currentUser?.id} />
-        <UserTaskList tasks={userTasks} markTaskComplete={markTaskComplete} addTask={addTask} />
+        <UserTaskList 
+          tasks={userTasks} 
+          markTaskComplete={(taskId) => markTaskComplete(taskId, currentUser)} 
+          addTask={addTask}
+          updateTask={updateTask}
+          deleteTask={deleteTask}
+        />
       </div>
 
       <div className="dashboard-bottom-section">

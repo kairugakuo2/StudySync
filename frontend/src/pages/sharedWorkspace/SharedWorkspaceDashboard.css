@@ -16,6 +16,13 @@
   letter-spacing: -0.02em;
 }
 
+.current-user-greeting {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0.5rem 0 0 0;
+  font-style: italic;
+}
+
 .dashboard-top-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -133,6 +140,12 @@
 
 .collaborator-item.selected {
   background-color: #eff6ff;
+}
+
+.collaborator-item.current-user {
+  background-color: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  padding-left: calc(0.5rem - 3px);
 }
 
 .collaborator-content {
@@ -388,6 +401,15 @@
   background-color: #f9fafb;
   border-radius: 6px;
   padding-left: 0.5rem;
+}
+
+.task-item.clickable-task {
+  cursor: pointer;
+}
+
+.task-item.clickable-task:hover {
+  background-color: #f3f4f6;
+}
   padding-right: 0.5rem;
 }
 
@@ -433,6 +455,13 @@
   color: #6b7280;
   font-size: 0.75rem;
   font-style: italic;
+}
+
+.task-attribution {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-style: italic;
+  margin-top: 0.25rem;
 }
 
 .task-status-pill {
@@ -611,9 +640,15 @@
 
 .form-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   gap: 0.75rem;
   margin-top: 1.5rem;
+}
+
+.form-actions-right {
+  display: flex;
+  gap: 0.75rem;
 }
 
 .cancel-btn,
@@ -647,6 +682,172 @@
 
 .submit-btn:active {
   background: #047857;
+}
+
+.delete-btn {
+  padding: 0.75rem 1.5rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+  background: #b91c1c;
+}
+
+.delete-btn:active {
+  background: #991b1b;
+}
+
+/* Task Edit Modal Styles */
+.task-edit-modal {
+  max-width: 600px;
+}
+
+.task-info-section,
+.related-tasks-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.task-info-section h4,
+.related-tasks-section h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1rem 0;
+}
+
+.task-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.task-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.task-info-item .info-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.task-info-item .info-value {
+  font-size: 0.875rem;
+  color: #1a1a1a;
+}
+
+.related-tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.related-task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.related-task-title {
+  font-size: 0.875rem;
+  color: #374151;
+  flex: 1;
+}
+
+.related-task-status {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* Task Edit Modal Styles */
+.task-edit-modal {
+  max-width: 600px;
+}
+
+.task-info-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.task-info-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  background: #f9fafb;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.task-info-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.task-info-row .info-label {
+  color: #6b7280;
+  font-weight: 600;
+  min-width: 120px;
+}
+
+.task-info-row .info-value {
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.related-tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.related-task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.related-task-title {
+  font-size: 0.875rem;
+  color: #374151;
+  flex: 1;
+}
+
+.related-task-status {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-weight: 600;
 }
 
 .task-complete-btn {

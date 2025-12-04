@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getCollaborators, getUserTasks, getWorkspaceState, getUpcomingSession, getRecentActivity, addTask } from '../api/sharedWorkspaceApi';
+import { getCollaborators, getUserTasks, getWorkspaceState, getUpcomingSession, getRecentActivity, addTask, updateTask } from '../api/sharedWorkspaceApi';
 
 /**
  * Custom hook for fetching shared workspace data
@@ -62,27 +62,61 @@ export function useSharedWorkspace({ userId = 1, workspaceId = "ws_001" } = {}) 
 
   /**
    * Cycles task status through: open → in-progress → done → open
+   * Tracks who marked the task as in-progress or done
    * @param {string|number} taskId - The task ID to cycle
+   * @param {Object} currentUser - Current user object { id, name }
    */
-  const markTaskComplete = (taskId) => {
-    setTasks(prevTasks => 
-      prevTasks.map(task => {
-        if (task.id === taskId) {
-          let newStatus;
-          if (task.status === 'open') {
-            newStatus = 'in-progress';
-          } else if (task.status === 'in-progress') {
-            newStatus = 'done';
-          } else {
-            // done or any other status → open
-            newStatus = 'open';
+  const markTaskComplete = async (taskId, currentUser = null) => {
+    const updatedTasks = tasks.map(task => {
+      if (task.id === taskId) {
+        let newStatus;
+        let updateData = {};
+        const timestamp = new Date().toISOString();
+
+        if (task.status === 'open') {
+          newStatus = 'in-progress';
+          updateData = {
+            status: newStatus
+          };
+          if (currentUser) {
+            updateData.inProgressBy = { userId: currentUser.id, name: currentUser.name, timestamp };
           }
-          return { ...task, status: newStatus };
+        } else if (task.status === 'in-progress') {
+          newStatus = 'done';
+          updateData = {
+            status: newStatus,
+            inProgressBy: task.inProgressBy // Keep existing inProgressBy
+          };
+          if (currentUser) {
+            updateData.doneBy = { userId: currentUser.id, name: currentUser.name, timestamp };
+          }
+        } else {
+          // done or any other status → open (clear attribution)
+          newStatus = 'open';
+          updateData = {
+            status: newStatus
+          };
+          // Remove attribution fields when resetting to open
+          const { inProgressBy, doneBy, ...rest } = task;
         }
-        return task;
-      })
-    );
-    console.log('Task status cycled (local state):', taskId);
+        return { ...task, ...updateData };
+      }
+      return task;
+    });
+
+    // Update local state immediately
+    setTasks(updatedTasks);
+
+    // Find the updated task
+    const updatedTask = updatedTasks.find(t => t.id === taskId);
+    
+    // Call backend API to save to mock data file
+    try {
+      await updateTask(taskId, updatedTask);
+      console.log('Task status updated and saved:', updatedTask);
+    } catch (error) {
+      console.error('Failed to save task update to backend, but task updated locally:', error);
+    }
   };
 
   /**
@@ -112,6 +146,29 @@ export function useSharedWorkspace({ userId = 1, workspaceId = "ws_001" } = {}) 
     }
   };
 
-  return { collaborators, tasks, workspace, upcomingSession, activity, loading, error, markTaskComplete, addTask: handleAddTask };
+  /**
+   * Updates a task in local state (UI-only, no backend call)
+   * @param {string|number} taskId - The task ID to update
+   * @param {Object} taskData - Updated task data
+   */
+  const handleUpdateTask = (taskId, taskData) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === taskId ? { ...task, ...taskData } : task
+      )
+    );
+    console.log('Task updated (local state):', taskId, taskData);
+  };
+
+  /**
+   * Deletes a task from local state (UI-only, no backend call)
+   * @param {string|number} taskId - The task ID to delete
+   */
+  const handleDeleteTask = (taskId) => {
+    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+    console.log('Task deleted (local state):', taskId);
+  };
+
+  return { collaborators, tasks, workspace, upcomingSession, activity, loading, error, markTaskComplete, addTask: handleAddTask, updateTask: handleUpdateTask, deleteTask: handleDeleteTask };
 }
 

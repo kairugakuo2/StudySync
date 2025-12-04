@@ -282,17 +282,18 @@ export const mockTasks = [
 
 // mockWorkspaceTasks: Dashboard tasks for Shared Workspace view (expanded set with due dates)
 // Note: These represent workspace-level tasks visible in the dashboard
+// inProgressBy and doneBy track who marked the task with their status
 export const mockWorkspaceTasks = [
   { id: 1, title: "Review Trees", status: "open", due: "2025-03-21T23:59:00Z" },
   { id: 2, title: "Finish Assignment a_001", status: "open", due: "2025-03-25T23:59:00Z" },
-  { id: 3, title: "Rewatch DP Lecture", status: "in-progress", due: "2025-03-20T23:59:00Z" },
-  { id: 4, title: "Prepare Notes for Session 3", status: "done", due: "2025-03-18T23:59:00Z" },
+  { id: 3, title: "Rewatch DP Lecture", status: "in-progress", due: "2025-03-20T23:59:00Z", inProgressBy: { userId: 1, name: "John Doe", timestamp: "2025-03-19T10:00:00Z" } },
+  { id: 4, title: "Prepare Notes for Session 3", status: "done", due: "2025-03-18T23:59:00Z", doneBy: { userId: 2, name: "Jane Smith", timestamp: "2025-03-18T15:30:00Z" } },
   { id: 5, title: "Solve Practice Problems Set 4", status: "open", due: "2025-03-28T23:59:00Z" },
-  { id: 6, title: "Implement Binary Search Tree", status: "in-progress", due: "2025-03-22T23:59:00Z" },
+  { id: 6, title: "Implement Binary Search Tree", status: "in-progress", due: "2025-03-22T23:59:00Z", inProgressBy: { userId: 3, name: "Carlos Vega", timestamp: "2025-03-19T14:20:00Z" } },
   { id: 7, title: "Create Flashcards for Hashing", status: "open", due: "2025-03-26T23:59:00Z" },
   { id: 8, title: "Debug Session Manager Tests", status: "open", due: "2025-03-24T23:59:00Z" },
-  { id: 9, title: "Write Summary Notes for Trees", status: "done", due: "2025-03-19T23:59:00Z" },
-  { id: 10, title: "Collaborate on Whiteboard Diagram", status: "in-progress", due: "2025-03-23T23:59:00Z" },
+  { id: 9, title: "Write Summary Notes for Trees", status: "done", due: "2025-03-19T23:59:00Z", doneBy: { userId: 1, name: "John Doe", timestamp: "2025-03-19T09:15:00Z" } },
+  { id: 10, title: "Collaborate on Whiteboard Diagram", status: "in-progress", due: "2025-03-23T23:59:00Z", inProgressBy: { userId: 4, name: "Emily Nguyen", timestamp: "2025-03-19T11:45:00Z" } },
   { id: 11, title: "Review Partner Code", status: "open", due: "2025-03-30T23:59:00Z" },
   { id: 12, title: "Submit Team Retrospective", status: "open", due: "2025-03-29T23:59:00Z" }
 ];

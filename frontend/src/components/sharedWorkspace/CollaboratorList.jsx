@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { mockUsers } from '../../../../tests/utils/mockData';
 
-export default function CollaboratorList({ collaborators = [] }) {
+export default function CollaboratorList({ collaborators = [], currentUserId = null }) {
   const [selectedCollaborator, setSelectedCollaborator] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -57,7 +57,7 @@ export default function CollaboratorList({ collaborators = [] }) {
             {collaborators.map((collaborator) => (
               <li 
                 key={collaborator.userId} 
-                className={`collaborator-item ${selectedCollaborator?.userId === collaborator.userId ? 'selected' : ''}`}
+                className={`collaborator-item ${selectedCollaborator?.userId === collaborator.userId ? 'selected' : ''} ${currentUserId === collaborator.userId ? 'current-user' : ''}`}
               >
                 <div className="collaborator-content">
                   <div className="collaborator-presence">
