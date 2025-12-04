@@ -1,11 +1,15 @@
 import express from "express";
+import cors from "cors";
 import { updateWorkspaceTask } from "./features/shared-workspace-dashboard/sharedWorkspaceController.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
 //middleware
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true
+}));
 app.use(express.json());
 
 // Health check route

@@ -1,0 +1,22 @@
+{
+  "type": "module",
+  "name": "studysync-backend",
+  "version": "1.0.0",
+  "description": "Minimal Express backend for StudySync",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
+

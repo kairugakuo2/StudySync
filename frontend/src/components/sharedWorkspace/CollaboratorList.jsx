@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { mockUsers } from '../../../../tests/utils/mockData';
+import { mockUsers } from '../../utils/mockData';
 
 export default function CollaboratorList({ collaborators = [], currentUserId = null }) {
   const [selectedCollaborator, setSelectedCollaborator] = useState(null);

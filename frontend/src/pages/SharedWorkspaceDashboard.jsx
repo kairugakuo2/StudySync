@@ -2,7 +2,7 @@ import { useSharedWorkspace } from '../hooks/useSharedWorkspace';
 import CollaboratorList from '../components/sharedWorkspace/CollaboratorList';
 import UserTaskList from '../components/sharedWorkspace/UserTaskList';
 import WorkspacePreview from '../components/sharedWorkspace/WorkspacePreview';
-import { mockUsers } from '../../../tests/utils/mockData';
+import { mockUsers } from '../utils/mockData';
 import './SharedWorkspaceDashboard.css';
 
 export default function SharedWorkspaceDashboard() {

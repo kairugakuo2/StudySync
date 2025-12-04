@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { mockUsers } from '../../../tests/utils/mockData';
+import { mockUsers } from '../utils/mockData';
 import './RootLayout.css';
 
 export default function RootLayout({ children }) {

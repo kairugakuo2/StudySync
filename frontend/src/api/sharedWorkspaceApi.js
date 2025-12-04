@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 // Import shared mock data
 import { 
@@ -7,7 +7,7 @@ import {
   mockWorkspaceState, 
   mockUpcomingSession, 
   mockActivity 
-} from '../../../tests/utils/mockData.js';
+} from '../utils/mockData.js';
 
 /**
  * Fetches collaborators for a workspace

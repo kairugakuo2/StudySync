@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mockUsers } from '../../../../tests/utils/mockData';
+import { mockUsers } from '../../utils/mockData';
 import './UserSelect.css';
 
 export default function UserSelect() {
