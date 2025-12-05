@@ -146,3 +146,14 @@ export default function RootLayout({ children }) {
   );
 }
 
+// inside nav markup
+<li>
+  <Link
+    to="/assignment-tracker"
+    className="block px-3 py-2 rounded-xl hover:bg-slate-800 text-sm"
+  >
+    Assignment Tracker
+  </Link>
+</li>
+
+

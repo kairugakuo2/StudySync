@@ -34,7 +34,14 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          <Route path="/assignment-tracker" element={<AssignmentTracker />} />
+          <Route
+          path="/assignment-tracker"
+          element={
+            <ProtectedRoute>
+              <AssignmentTracker />
+            </ProtectedRoute>              
+            }
+          />
           <Route path="/practice-problems" element={<PracticeProblems />} />
           <Route path="/session-manager" element={<SessionManager />} />
           <Route path="/workspace/:workspaceId" element={<Workspace />} />
