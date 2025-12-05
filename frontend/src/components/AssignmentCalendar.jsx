@@ -26,6 +26,7 @@ function dateKey(date) {
 function UpcomingAssignments(props) {
   const assignments = props.assignments || [];
   const onToggleComplete = props.onToggleComplete;
+  const onRemove = props.onRemove;
 
   const sorted = assignments.slice().sort((a, b) =>
     a.dueDate.localeCompare(b.dueDate)
@@ -35,15 +36,20 @@ function UpcomingAssignments(props) {
     return e(
       "div",
       { className: "text-sm text-slate-400" },
-      "no assignments yet add one using the form"
+      "No assignments yet - add one using the form above."
     );
   }
 
   return e(
     "div",
     { className: "space-y-2 max-h-64 overflow-auto text-sm" },
-    sorted.map((a) =>
-      e(
+    sorted.map((a) => {
+      const meta =
+        (a.course ? a.course + " · " : "") +
+        a.dueDate +
+        (a.dueTime ? " " + a.dueTime : "");
+
+      return e(
         "div",
         {
           key: a.id,
@@ -54,27 +60,38 @@ function UpcomingAssignments(props) {
           "div",
           null,
           e("div", { className: "font-medium text-sm truncate" }, a.title),
-          e(
-            "div",
-            { className: "text-[11px] text-slate-400" },
-            (a.course ? a.course + " · " : "") + a.dueDate
-          )
+          e("div", { className: "text-[11px] text-slate-400" }, meta)
         ),
         e(
-          "button",
-          {
-            type: "button",
-            onClick: () => onToggleComplete(a.id),
-            className:
-              "text-[11px] px-2 py-[2px] rounded-full " +
-              (a.completed
-                ? "bg-emerald-500 text-slate-950"
-                : "bg-slate-950 text-slate-100"),
-          },
-          a.completed ? "done" : "mark done"
+          "div",
+          { className: "flex items-center gap-2" },
+          e(
+            "button",
+            {
+              type: "button",
+              onClick: () => onToggleComplete(a.id),
+              className:
+                "text-[11px] px-2 py-[2px] rounded-full " +
+                (a.completed
+                  ? "bg-emerald-500 text-slate-950"
+                  : "bg-slate-950 text-slate-100"),
+            },
+            a.completed ? "Done" : "Mark done"
+          ),
+          a.completed &&
+            e(
+              "button",
+              {
+                type: "button",
+                onClick: () => onRemove && onRemove(a.id),
+                className:
+                  "text-[10px] px-2 py-[1px] rounded-full bg-slate-700 text-slate-100",
+              },
+              "Remove"
+            )
         )
-      )
-    )
+      );
+    })
   );
 }
 
@@ -155,17 +172,22 @@ function renderCalendarCells(monthDays, assignmentsByDate, handleToggleComplete)
 }
 
 function AssignmentCalendar() {
-  console.log("AssignmentCalendar RENDERED!!");
+  console.log("AssignmentCalendar RENDERED");
 
   const today = new Date();
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+
+  // single state object for month and year so navigation is reliable
+  const [currentDate, setCurrentDate] = useState(() => ({
+    month: today.getMonth(), // 0 based
+    year: today.getFullYear(),
+  }));
 
   const [assignments, setAssignments] = useState([]);
 
   const [formTitle, setFormTitle] = useState("");
   const [formCourse, setFormCourse] = useState("");
   const [formDueDate, setFormDueDate] = useState("");
+  const [formDueTime, setFormDueTime] = useState("");
 
   // load assignments
   useEffect(() => {
@@ -175,7 +197,9 @@ function AssignmentCalendar() {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) setAssignments(parsed);
       }
-    } catch (err) {}
+    } catch (err) {
+      // ignore localstorage read issues
+    }
   }, []);
 
   // save assignments
@@ -185,7 +209,9 @@ function AssignmentCalendar() {
         "studysync_assignments",
         JSON.stringify(assignments)
       );
-    } catch (err) {}
+    } catch (err) {
+      // ignore localstorage write issues
+    }
   }, [assignments]);
 
   // map by date
@@ -199,8 +225,8 @@ function AssignmentCalendar() {
   }, [assignments]);
 
   const monthDays = useMemo(
-    () => getMonthDays(currentYear, currentMonth),
-    [currentYear, currentMonth]
+    () => getMonthDays(currentDate.year, currentDate.month),
+    [currentDate]
   );
 
   function handleAddAssignment(event) {
@@ -208,10 +234,14 @@ function AssignmentCalendar() {
     if (!formTitle.trim() || !formDueDate) return;
 
     const newAssignment = {
-      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+      id:
+        typeof crypto !== "undefined" && crypto.randomUUID
+          ? crypto.randomUUID()
+          : String(Date.now()),
       title: formTitle.trim(),
       course: formCourse.trim(),
       dueDate: formDueDate,
+      dueTime: formDueTime,
       completed: false,
     };
 
@@ -219,40 +249,41 @@ function AssignmentCalendar() {
     setFormTitle("");
     setFormCourse("");
     setFormDueDate("");
+    setFormDueTime("");
   }
 
   function handleToggleComplete(id) {
     setAssignments((prev) =>
-      prev.map((a) =>
-        a.id === id ? { ...a, completed: !a.completed } : a
-      )
+      prev.map((a) => (a.id === id ? { ...a, completed: !a.completed } : a))
     );
   }
 
+  function handleRemoveAssignment(id) {
+    setAssignments((prev) => prev.filter((a) => a.id !== id));
+  }
+
+  // month navigation uses real Date to handle year rollovers correctly
   function goToNextMonth() {
-    setCurrentMonth((prev) => {
-      if (prev === 11) {
-        setCurrentYear((y) => y + 1);
-        return 0;
-      }
-      return prev + 1;
+    setCurrentDate((prev) => {
+      const d = new Date(prev.year, prev.month, 1);
+      d.setMonth(d.getMonth() + 1);
+      return { year: d.getFullYear(), month: d.getMonth() };
     });
   }
 
   function goToPrevMonth() {
-    setCurrentMonth((prev) => {
-      if (prev === 0) {
-        setCurrentYear((y) => y - 1);
-        return 11;
-      }
-      return prev - 1;
+    setCurrentDate((prev) => {
+      const d = new Date(prev.year, prev.month, 1);
+      d.setMonth(d.getMonth() - 1);
+      return { year: d.getFullYear(), month: d.getMonth() };
     });
   }
 
-  const monthLabel = new Date(currentYear, currentMonth, 1).toLocaleString(
-    "default",
-    { month: "long", year: "numeric" }
-  );
+  const monthLabel = new Date(
+    currentDate.year,
+    currentDate.month,
+    1
+  ).toLocaleString("default", { month: "long", year: "numeric" });
 
   return e(
     "div",
@@ -263,11 +294,11 @@ function AssignmentCalendar() {
     e(
       "div",
       null,
-      e("h1", { className: "text-2xl font-semibold mb-1" }, "assignment calendar"),
+      e("h1", { className: "text-2xl font-semibold mb-1" }, "Assignment Calendar"),
       e(
         "p",
         { className: "text-sm text-slate-400" },
-        "add assignments with due dates and see them on the calendar"
+        "Add assignments with due dates and see them on the calendar."
       )
     ),
     e(
@@ -287,7 +318,7 @@ function AssignmentCalendar() {
               onClick: goToPrevMonth,
               className: "px-3 py-1 rounded-xl bg-slate-800 text-sm",
             },
-            "prev"
+            "Prev"
           ),
           e("span", { className: "font-medium text-lg" }, monthLabel),
           e(
@@ -297,7 +328,7 @@ function AssignmentCalendar() {
               onClick: goToNextMonth,
               className: "px-3 py-1 rounded-xl bg-slate-800 text-sm",
             },
-            "next"
+            "Next"
           )
         ),
         // weekday header grid
@@ -312,7 +343,7 @@ function AssignmentCalendar() {
               textAlign: "center",
             },
           },
-          ["sun", "mon", "tue", "wed", "thu", "fri", "sat"].map((d) =>
+          ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) =>
             e("div", { key: d }, d)
           )
         ),
@@ -345,7 +376,7 @@ function AssignmentCalendar() {
         e(
           "div",
           null,
-          e("h2", { className: "text-lg font-semibold mb-2" }, "add assignment"),
+          e("h2", { className: "text-lg font-semibold mb-2" }, "Add Assignment"),
           e(
             "form",
             { className: "flex flex-col gap-2", onSubmit: handleAddAssignment },
@@ -353,7 +384,7 @@ function AssignmentCalendar() {
               type: "text",
               className:
                 "rounded-xl bg-slate-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500",
-              placeholder: "assignment title",
+              placeholder: "Assignment title",
               value: formTitle,
               onChange: (event) => setFormTitle(event.target.value),
             }),
@@ -361,9 +392,16 @@ function AssignmentCalendar() {
               type: "text",
               className:
                 "rounded-xl bg-slate-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500",
-              placeholder: "course optional",
+              placeholder: "Course optional",
               value: formCourse,
               onChange: (event) => setFormCourse(event.target.value),
+            }),
+            e("input", {
+              type: "time",
+              className:
+                "rounded-xl bg-slate-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500",
+              value: formDueTime,
+              onChange: (event) => setFormDueTime(event.target.value),
             }),
             e("input", {
               type: "date",
@@ -379,17 +417,22 @@ function AssignmentCalendar() {
                 className:
                   "mt-1 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-sm font-medium px-3 py-2",
               },
-              "add to calendar"
+              "Add to calendar"
             )
           )
         ),
         e(
           "div",
           { className: "border-t border-slate-800 pt-3" },
-          e("h2", { className: "text-lg font-semibold mb-2" }, "upcoming assignments"),
+          e(
+            "h2",
+            { className: "text-lg font-semibold mb-2" },
+            "Upcoming Assignments"
+          ),
           e(UpcomingAssignments, {
             assignments: assignments,
             onToggleComplete: handleToggleComplete,
+            onRemove: handleRemoveAssignment,
           })
         )
       )
