@@ -1,23 +1,34 @@
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
-import tutorController from "./features/tutor-tab/tutorController.js";
-const { addStudentLogic, listStudentsLogic, reset } = tutorController;
+import { updateWorkspaceTask } from "./features/shared-workspace-dashboard/sharedWorkspaceController.js";
 
 const app = express();
-app.use(cors());
 const PORT = process.env.PORT || 3000;
 
-
 //middleware
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true
+}));
 app.use(express.json());
-
-//serve files from backend/public
-app.use(express.static("backend/public"));
 
 // Health check route
 app.get('/ping', (req, res) => {
   res.json({ message: 'pong' });
+});
+
+// Shared Workspace Dashboard routes
+app.put('/shared-workspace-dashboard/tasks/:taskId', (req, res) => {
+  const taskId = req.params.taskId;
+  const taskData = req.body;
+  
+  const result = updateWorkspaceTask(taskId, taskData);
+  
+  if (result.message && result.message.includes("Error")) {
+    return res.status(400).json(result);
+  }
+  
+  res.json(result);
 });
 
 // Start server
@@ -25,26 +36,6 @@ app.listen(PORT, () => {
   console.log(`StudySync backend listening on http://localhost:${PORT}`);
 });
 
-//export default app;
+module.exports = app;
 
-app.get("/api/tutor-tab/students", (req, res) => {
-  res.json(listStudentsLogic());
-});
-
-app.post("/api/tutor-tab/students", (req, res) => {
-  const { name } = req.body;
-  try {
-    const student = addStudentLogic(name);
-    res.status(201).json(student);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-app.post("/api/tutor-tab/reset", (req, res) => {
-  try {
-    reset(); // this calls tutorController.reset()
-    res.status(200).json({ message: "All students cleared." });
-  } catch (err) {
-    res.status(500).json({ error: "Reset failed." });
-  }
-});
+ 
