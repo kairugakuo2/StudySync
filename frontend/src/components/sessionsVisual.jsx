@@ -35,73 +35,9 @@ function SessionMan() {
     }
   }
 
-  function handleCreate(e) {
-    e.preventDefault();
-    setError("");
-    setMessage("");
-
-    try {
-      const newSession = createSession({
-        title,
-        startTime,
-        endTime,
-        participants: participantsInput
-          .split(",")
-          .map((p) => p.trim())
-          .filter(Boolean),
-      }).session;
-
-      setSessions((prev) => [...prev, newSession]);
-      setMessage("Session created.");
-      refreshUpcoming();
-
-      // Reset form
-      setTitle("");
-      setStartTime("");
-      setEndTime("");
-      setParticipantsInput("");
-    } catch (err) {
-      setError(err.message);
-    }
-  }
-
-  function handleEnd(sessionId) {
-    setError("");
-    setMessage("");
-
-    try {
-      const result = endSession(sessionId).session;
-
-      setSessions((prev) =>
-        prev.map((s) => (s.id === sessionId ? result : s))
-      );
-
-      setMessage("Session ended.");
-      refreshUpcoming();
-    } catch (err) {
-      setError(err.message);
-    }
-  }
-
-  function handleLoadParticipants(sessionId) {
-    setError("");
-    setMessage("");
-
-    try {
-      const p = getSessionParticipants(sessionId);
-      setParticipants(p.participants);
-      setSelectedId(sessionId);
-      setMessage("Participants loaded.");
-    } catch (err) {
-      setError(err.message);
-    }
-  }
-
   return (
     <div className="w-full h-full flex flex-col px-4 py-6 gap-6" style={{ maxWidth: "1000px", margin: "0 auto" }}>
       <h1 className="text-2xl font-semibold">Session Manager</h1>
-
-      {error && <div className="bg-red-900 text-red-200 px-3 py-2 rounded-xl">{error}</div>}
       {message && <div className="bg-emerald-900 text-emerald-200 px-3 py-2 rounded-xl">{message}</div>}
 
       {/* Form */}
