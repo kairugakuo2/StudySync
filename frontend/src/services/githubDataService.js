@@ -5,7 +5,7 @@
  */
 
 // These should match your GitHub repo
-const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO || 'your-username/your-repo';
+const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO || 'kairugakuo2/studysync-data';
 const DATA_FILE_PATH = 'data/workspace.json';
 const GITHUB_BRANCH = 'main'; // or 'master'
 

@@ -88,7 +88,7 @@ export default async function handler(req, res) {
   
   // Get token from Vercel environment variable
   const GITHUB_TOKEN = process.env.GITHUB_PAT;
-  const GITHUB_REPO = process.env.GITHUB_REPO || 'your-username/your-repo';
+  const GITHUB_REPO = process.env.GITHUB_REPO || 'kairugakuo2/studysync-data';
   const DATA_FILE_PATH = 'data/workspace.json';
   const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
   
