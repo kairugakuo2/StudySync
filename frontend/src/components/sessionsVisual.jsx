@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getUpcomingSession } from "../../api/sharedWorkspaceApi.js";
+import * from "../../api/sharedWorkspaceApi.js";
 function SessionMan() {
   console.log("SessionManager RENDERED");
 
