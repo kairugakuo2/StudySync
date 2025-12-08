@@ -9,6 +9,15 @@ const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO || 'kairugakuo2/studysync-d
 const DATA_FILE_PATH = 'data/workspace.json';
 const GITHUB_BRANCH = 'main'; // or 'master'
 
+// Import mock data for fallback
+import { 
+  mockWorkspaces,
+  mockUsers,
+  mockWorkspaceTasks as mockTasks, 
+  mockUpcomingSession, 
+  mockActivity 
+} from '../utils/mockData.js';
+
 class GitHubDataService {
   /**
    * Read workspace data from public GitHub repo
@@ -44,6 +53,83 @@ class GitHubDataService {
   }
   
   /**
+   * Get workspace JSON data for a specific workspace
+   * @param {string} workspaceId - The workspace ID
+   * @returns {Promise<Object>} Workspace object or null
+   */
+  static async getWorkspaceJSON(workspaceId) {
+    try {
+      const allData = await this.fetchWorkspaceData();
+      return allData.workspaces?.[workspaceId] || null;
+    } catch (error) {
+      console.warn('Failed to fetch workspace from GitHub, using mock data:', error);
+      return mockWorkspaces.find(ws => ws.id === workspaceId) || null;
+    }
+  }
+  
+  /**
+   * Get tasks for a specific workspace
+   * @param {string} workspaceId - The workspace ID
+   * @returns {Promise<Array>} Array of task objects
+   */
+  static async getTasks(workspaceId) {
+    try {
+      const allData = await this.fetchWorkspaceData();
+      const tasks = allData.tasks?.[workspaceId] || [];
+      return Array.isArray(tasks) ? tasks : [];
+    } catch (error) {
+      console.warn('Failed to fetch tasks from GitHub, using mock data:', error);
+      return mockTasks.filter(task => task.workspaceId === workspaceId);
+    }
+  }
+  
+  /**
+   * Get notes for a specific workspace
+   * @param {string} workspaceId - The workspace ID
+   * @returns {Promise<Object>} Notes object with study, formulas, ideas
+   */
+  static async getNotes(workspaceId) {
+    try {
+      const allData = await this.fetchWorkspaceData();
+      return allData.notes?.[workspaceId] || { study: '', formulas: '', ideas: '' };
+    } catch (error) {
+      console.warn('Failed to fetch notes from GitHub, using empty notes:', error);
+      return { study: '', formulas: '', ideas: '' };
+    }
+  }
+  
+  /**
+   * Get whiteboard data for a specific workspace
+   * @param {string} workspaceId - The workspace ID
+   * @returns {Promise<Object|null>} Whiteboard object or null
+   */
+  static async getWhiteboard(workspaceId) {
+    try {
+      const allData = await this.fetchWorkspaceData();
+      return allData.whiteboards?.[workspaceId] || null;
+    } catch (error) {
+      console.warn('Failed to fetch whiteboard from GitHub, using null:', error);
+      return null;
+    }
+  }
+  
+  /**
+   * Get files for a specific workspace
+   * @param {string} workspaceId - The workspace ID
+   * @returns {Promise<Array>} Array of file objects
+   */
+  static async getFiles(workspaceId) {
+    try {
+      const allData = await this.fetchWorkspaceData();
+      const files = allData.files?.[workspaceId] || [];
+      return Array.isArray(files) ? files : [];
+    } catch (error) {
+      console.warn('Failed to fetch files from GitHub, using empty array:', error);
+      return [];
+    }
+  }
+  
+  /**
    * Write workspace data via Vercel serverless function
    * Token is stored server-side, never exposed to browser
    */
@@ -56,9 +142,12 @@ class GitHubDataService {
       files: updates.files
     };
     
+    // Use VITE_API_URL if set, otherwise default to /api/update
+    const API_URL = import.meta.env.VITE_API_URL || '/api/update';
+    
     try {
-      console.log('Calling GitHub API:', { workspaceId, username, updates: Object.keys(updatesToSend) });
-      const response = await fetch('/api/github/update', {
+      console.log('Calling update API:', { workspaceId, username, updates: Object.keys(updatesToSend) });
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -72,15 +161,15 @@ class GitHubDataService {
       
       if (!response.ok) {
         const error = await response.json();
-        console.error('GitHub API error response:', error);
+        console.error('Update API error response:', error);
         throw new Error(error.message || `Failed to update (${response.status})`);
       }
       
       const result = await response.json();
-      console.log('GitHub API success:', result);
+      console.log('Update API success:', result);
       return result;
     } catch (error) {
-      console.error('Error updating GitHub:', error);
+      console.error('Error updating workspace:', error);
       throw error;
     }
   }
@@ -102,9 +191,11 @@ class GitHubDataService {
   
   /**
    * Fallback data if GitHub fetch fails
+   * Returns structure compatible with mock data
    */
   static getFallbackData() {
     // Return structure that matches expected format
+    // This will be used when GitHub fetch fails
     return this.getEmptyDataStructure();
   }
 }

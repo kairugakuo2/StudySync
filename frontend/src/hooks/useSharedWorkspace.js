@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getCollaborators, getUserTasks, getWorkspaceState, getUpcomingSession, getRecentActivity, addTask, updateTask } from '../api/sharedWorkspaceApi';
+import { getCollaborators, getUserTasks, getWorkspaceState, getUpcomingSession, getRecentActivity, addTask, updateTask, deleteTask } from '../api/sharedWorkspaceApi';
 
 /**
  * Custom hook for fetching shared workspace data
@@ -163,12 +163,21 @@ export function useSharedWorkspace({ userId = 1, workspaceId = "ws_001" } = {}) 
   };
 
   /**
-   * Deletes a task from local state (UI-only, no backend call)
+   * Deletes a task from local state and backend
    * @param {string|number} taskId - The task ID to delete
    */
-  const handleDeleteTask = (taskId) => {
+  const handleDeleteTask = async (taskId) => {
+    // Update local state immediately
     setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-    console.log('Task deleted (local state):', taskId);
+    
+    try {
+      // Call backend API to save deletion
+      await deleteTask(taskId, workspaceId);
+      console.log('Task deleted and saved:', taskId);
+    } catch (error) {
+      console.error('Failed to delete task on backend, but task deleted locally:', error);
+      // Task remains deleted in local state even if backend save fails
+    }
   };
 
   return { collaborators, tasks, workspace, upcomingSession, activity, loading, error, markTaskComplete, addTask: handleAddTask, updateTask: handleUpdateTask, deleteTask: handleDeleteTask };
