@@ -1,0 +1,110 @@
+.workspace-editor {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.workspace-editor h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.editor-error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.editor-field {
+  margin-bottom: 1rem;
+}
+
+.editor-field label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.editor-field input,
+.editor-field textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.editor-field input:focus,
+.editor-field textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.editor-field input:disabled,
+.editor-field textarea:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.editor-field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.editor-save-btn,
+.editor-cancel-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.editor-save-btn {
+  background: #3b82f6;
+  color: white;
+}
+
+.editor-save-btn:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.editor-save-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.editor-cancel-btn {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.editor-cancel-btn:hover:not(:disabled) {
+  background: #d1d5db;
+}
+
+.editor-cancel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

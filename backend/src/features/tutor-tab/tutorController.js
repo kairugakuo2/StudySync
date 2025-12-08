@@ -50,7 +50,23 @@ function addNoteLogic(studnetId, { text, tags = []}) {
 function listNotesLogic(studentId) {
     return notes.filter(n => n.studentId === studentId);
 }
-exports.createStudent = (req, res) =>{
+function reset() {
+    students = [];
+    sessions = [];
+    notes = [];
+}
+export { 
+    addStudentLogic,
+    listStudentsLogic,
+    reset,
+    
+};
+export default {
+    addStudentLogic,
+    listStudentsLogic,
+    reset
+}
+/*exports.createStudent = (req, res) =>{
     const s = addStudentLogic(req.body?.name);
     res.status(201).json(s);
 };
@@ -78,4 +94,4 @@ exports.__test = {
     reset: () => { students = []; sessions = []; notes = []; },
     addStudentLogic,
     listStudentsLogic,
-};
+};*/
