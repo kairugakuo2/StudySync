@@ -16,6 +16,25 @@ function SessionMan() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+    async function fetchSession() {
+      try {
+        const response = await fetch('http://localhost:3000/api/sessions/upcoming');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setSession(data.session); // assuming backend returns { session: {...} }
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch session.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchSession();
+  }, []);
   // Load upcoming sessions on mount
   useEffect(() => {
     try {
