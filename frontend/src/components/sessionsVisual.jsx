@@ -101,9 +101,6 @@ function SessionMan() {
     <div className="w-full h-full flex flex-col px-4 py-6 gap-6" style={{ maxWidth: "1000px", margin: "0 auto" }}>
       <h1 className="text-2xl font-semibold">Session Manager</h1>
 
-      {error && <div className="bg-red-900 text-red-200 px-3 py-2 rounded-xl">{error}</div>}      {error && <div className="bg-red-900 text-red-200 px-3 py-2 rounded-xl">{error}</div>}
-      {message && <div className="bg-emerald-900 text-emerald-200 px-3 py-2 rounded-xl">{message}</div>}
-
       {/* Form */}
       <div className="bg-slate-900 rounded-2xl p-4 shadow-lg">
         <h2 className="text-lg font-semibold mb-2">Create Session</h2>
