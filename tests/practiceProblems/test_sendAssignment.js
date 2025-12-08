@@ -3,8 +3,6 @@
 // Feature: Practice Problems
 // Function: sendAssignment()
 
-const {sendAssignment} = require("../../frontend/src/components/Workspace.js");
-
 // TEST //
 
 const { selectedStudent, studentResults } = require('./test_studentSelect.js');

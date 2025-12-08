@@ -3,8 +3,6 @@
 // Feature: Practice Problems
 // Function: studentSelect(name)
 
-const {studentSelect} = require("../../frontend/src/components/Workspace.js");
-
 // TEST //
 
 const readline = require('readline');

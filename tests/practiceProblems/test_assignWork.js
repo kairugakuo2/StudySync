@@ -3,8 +3,6 @@
 // Feature: Practice Problems
 // Function: assignWork(assignment_Name)
 
-const {assignWork} = require("../../frontend/src/components/Workspace.js");
-
 // TEST //
 
 const readline = require('readline');
