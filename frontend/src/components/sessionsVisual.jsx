@@ -19,7 +19,7 @@ function SessionMan() {
   // Load upcoming sessions on mount
   useEffect(() => {
     try {
-      const u = getUpcomingSessions();
+      const u = getUpcomingSession();
       setUpcoming(u.sessions);
     } catch (err) {
       setError(err.message);
@@ -28,7 +28,7 @@ function SessionMan() {
 
   function refreshUpcoming() {
     try {
-      const u = getUpcomingSessions();
+      const u = getUpcomingSession();
       setUpcoming(u.sessions);
     } catch (err) {
       setError(err.message);
