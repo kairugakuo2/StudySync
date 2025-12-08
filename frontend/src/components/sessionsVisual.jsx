@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import * as api from "../../api/sharedWorkspaceApi.js";
+import * from '../../pages/sharedWorkspace/SharedWorkspaceDashboard.jsx';
 function SessionMan() {
   console.log("SessionManager RENDERED");
 
