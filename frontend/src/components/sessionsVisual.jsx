@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-
+import {
+  createSession,
+  endSession,
+  getUpcomingSessions,
+  getSessionParticipants
+} from "../../../backend/src/features/sessionManager/sessionManagerController";
 function SessionMan() {
   console.log("SessionManager RENDERED");
 
