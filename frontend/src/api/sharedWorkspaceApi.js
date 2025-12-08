@@ -61,7 +61,7 @@ export async function getCollaborators(workspaceId = "ws_001") {
       };
     });
   } catch (error) {
-    console.warn('Failed to fetch collaborators, using mock data:', error);
+      console.warn('Failed to fetch collaborators, using mock data:', error);
     // Derive collaborators from selected workspace
     const workspace = mockWorkspaces.find(ws => ws.id === workspaceId) || mockWorkspaces[0];
     const presenceByUserId = {
@@ -89,7 +89,7 @@ export async function getCollaborators(workspaceId = "ws_001") {
 export async function getUpcomingSession() {
   // Session data is not part of workspace.json structure
   // Return mock data as fallback
-  return mockUpcomingSession;
+    return mockUpcomingSession;
 }
 
 /**
@@ -100,7 +100,7 @@ export async function getUpcomingSession() {
 export async function getRecentActivity() {
   // Activity data is not part of workspace.json structure
   // Return mock data as fallback
-  return mockActivity;
+    return mockActivity;
 }
 
 /**
@@ -117,7 +117,7 @@ export async function getUserTasks(userId = 1, workspaceId = "ws_001") {
     // Return all tasks for the workspace (filtered by workspaceId in the service)
     return tasks;
   } catch (error) {
-    console.warn('Failed to fetch tasks, using mock data:', error);
+      console.warn('Failed to fetch tasks, using mock data:', error);
     // Filter mock data by workspaceId only (show all tasks for the workspace)
     return mockTasks.filter(task => task.workspaceId === workspaceId);
   }
@@ -165,7 +165,7 @@ export async function getWorkspaceState(userId = 1, workspaceId = "ws_001") {
       ownerId: mockWorkspace.ownerId
     };
   } catch (error) {
-    console.warn('Failed to fetch workspace state, using mock data:', error);
+      console.warn('Failed to fetch workspace state, using mock data:', error);
     // Derive workspace state from selected workspace
     const workspace = mockWorkspaces.find(ws => ws.id === workspaceId) || mockWorkspaces[0];
     const tutor = workspace.collaboratorList?.find(c => c.role === 'tutor');
@@ -235,7 +235,7 @@ export async function updateTask(taskId, taskData) {
         if (Array.isArray(tasks) && tasks.find(t => t.id === taskId || t.id === String(taskId))) {
           workspaceId = wsId;
           break;
-        }
+    }
       }
       if (!workspaceId) {
         workspaceId = "ws_001"; // Default fallback
