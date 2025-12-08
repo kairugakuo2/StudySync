@@ -1,0 +1,125 @@
+.shared-workspace-page {
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.workspace-header-section {
+  margin-bottom: 2rem;
+}
+
+.workspace-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.shared-workspace-page h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 1rem 0;
+}
+
+.workspace-meta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.workspace-status-badge {
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.workspace-status-active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.workspace-status-idle {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.workspace-meta-item {
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.workspace-description {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.workspace-description p {
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.workspace-tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.workspace-tool-section {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-height: 400px;
+}
+
+.whiteboard-section {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  min-height: 600px;
+}
+
+.files-section {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  min-height: 600px;
+}
+
+.loading-message,
+.error-message {
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+.error-message {
+  color: #dc2626;
+}
+
