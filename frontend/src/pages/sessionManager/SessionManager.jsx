@@ -1,4 +1,4 @@
-import sessionManager from "../../components/sessions.jsx";
+import sessions from "../../components/sessions.jsx";
 
 export default function sessionManager() {
   return (
