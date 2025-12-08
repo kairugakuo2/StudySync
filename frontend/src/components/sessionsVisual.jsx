@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  createSession,
-  endSession,
-  getUpcomingSessions,
-  getSessionParticipants
-} from "../../../backend/src/features/sessionManager/sessionManagerController";
 
-function Session() {
+function SessionMan() {
   console.log("SessionManager RENDERED");
 
   const [sessions, setSessions] = useState([]);
@@ -238,4 +232,4 @@ function Session() {
   );
 }
 
-export default sessionsVisual;
+export default SessionMan;
