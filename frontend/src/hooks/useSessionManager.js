@@ -4,7 +4,7 @@ import {
   endSession,
   getUpcomingSessions,
   getSessionParticipants
-} from "../controllers/sessionManagerController";
+} from "../../../backend/src/features/sessionManager/sessionManagerController.js";
 
 export default function useSessionManager() {
   const [sessions, setSessions] = useState([]);
@@ -21,9 +21,7 @@ export default function useSessionManager() {
     refreshUpcoming();
   }, []);
 
-  // -----------------------------
-  // Load upcoming sessions
-  // -----------------------------
+
   const refreshUpcoming = useCallback(() => {
     try {
       const res = getUpcomingSessions();
