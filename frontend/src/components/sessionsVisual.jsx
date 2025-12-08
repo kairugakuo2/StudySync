@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import getSessionParticipants from "../../../backend/src/features/sessionManager/sessionManagerController";
+import getUpcomingSessions from "../../api/sharedWorkspaceApi.js";
 function SessionMan() {
   console.log("SessionManager RENDERED");
 
