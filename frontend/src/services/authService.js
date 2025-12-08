@@ -3,6 +3,8 @@
  * Users select a username from dropdown - no real auth needed
  */
 
+import { mockUsers } from '../utils/mockData';
+
 class AuthService {
   static getCurrentUser() {
     const username = localStorage.getItem('demo_username');
@@ -10,11 +12,16 @@ class AuthService {
     
     if (!username) return null;
     
+    // Look up the actual user from mockUsers to get their real role
+    const userIdNum = userId ? parseInt(userId, 10) : null;
+    const actualUser = userIdNum ? Object.values(mockUsers).find(u => u.id === userIdNum) : null;
+    
     return {
       id: userId,
       name: username,
-      role: 'student', // Mock role
-      username: username
+      role: actualUser?.role || 'student', // Get real role from mockUsers
+      username: username,
+      email: actualUser?.email || null
     };
   }
   

@@ -23,15 +23,112 @@ export default function SharedWorkspace() {
   const { data: githubData, loading: githubLoading, error: githubError, updateWorkspace: updateGitHubWorkspace } = useWorkspaceData(workspaceId);
   
   // Use existing hook for collaborators and tasks (can be enhanced later)
-  const { collaborators, tasks, workspace, loading, error, markTaskComplete, addTask, updateTask, deleteTask } = useSharedWorkspace({
+  const { collaborators, tasks: hookTasks, workspace, loading, error, markTaskComplete, addTask, updateTask, deleteTask } = useSharedWorkspace({
     userId: currentUser?.id,
     workspaceId: workspaceId || "ws_001"
   });
 
-  // Merge GitHub data with existing data
+  // Merge GitHub data with existing data (GitHub is source of truth)
   const mergedWorkspace = githubData?.workspace || workspace;
-  const mergedTasks = githubData?.tasks || tasks;
+  const mergedTasks = githubData?.tasks || hookTasks;
   const userTasks = mergedTasks;
+
+  // Wrapper functions to sync task updates to GitHub
+  const handleMarkTaskComplete = async (taskId) => {
+    // Find the current task
+    const currentTask = mergedTasks.find(t => t.id === taskId);
+    if (!currentTask) return;
+    
+    // Compute the updated task based on current status
+    let updatedTask = { ...currentTask };
+    const timestamp = new Date().toISOString();
+    
+    if (currentTask.status === 'open') {
+      updatedTask.status = 'in-progress';
+      if (currentUser) {
+        updatedTask.inProgressBy = { userId: currentUser.id, name: currentUser.name, timestamp };
+      }
+    } else if (currentTask.status === 'in-progress') {
+      updatedTask.status = 'done';
+      updatedTask.inProgressBy = currentTask.inProgressBy; // Keep existing
+      if (currentUser) {
+        updatedTask.doneBy = { userId: currentUser.id, name: currentUser.name, timestamp };
+      }
+    } else {
+      // done → open (clear attribution)
+      updatedTask.status = 'open';
+      const { inProgressBy, doneBy, ...rest } = updatedTask;
+      updatedTask = rest;
+    }
+    
+    // Update local state optimistically (hook's function)
+    await markTaskComplete(taskId, currentUser);
+    
+    // Save updated tasks to GitHub
+    const updatedTasks = mergedTasks.map(task => 
+      task.id === taskId ? updatedTask : task
+    );
+    
+    try {
+      await updateGitHubWorkspace({ tasks: updatedTasks });
+    } catch (error) {
+      console.error('Failed to save task update to GitHub:', error);
+    }
+  };
+
+  const handleAddTask = async (taskData) => {
+    // Generate new task ID
+    const maxId = mergedTasks.length > 0 
+      ? Math.max(...mergedTasks.map(t => typeof t.id === 'number' ? t.id : parseInt(t.id) || 0)) 
+      : 0;
+    const newTask = {
+      id: maxId + 1,
+      ...taskData,
+      workspaceId: workspaceId,
+      assignedTo: taskData.assignedTo || [currentUser?.id]
+    };
+    
+    // Update local state
+    await addTask(newTask);
+    
+    // Save to GitHub
+    const updatedTasks = [...mergedTasks, newTask];
+    try {
+      await updateGitHubWorkspace({ tasks: updatedTasks });
+    } catch (error) {
+      console.error('Failed to save new task to GitHub:', error);
+    }
+  };
+
+  const handleUpdateTask = async (taskId, taskData) => {
+    // Update local state
+    updateTask(taskId, taskData);
+    
+    // Save updated tasks to GitHub
+    const updatedTasks = mergedTasks.map(task => 
+      task.id === taskId ? { ...task, ...taskData } : task
+    );
+    
+    try {
+      await updateGitHubWorkspace({ tasks: updatedTasks });
+    } catch (error) {
+      console.error('Failed to save task update to GitHub:', error);
+    }
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    // Update local state
+    deleteTask(taskId);
+    
+    // Save updated tasks to GitHub
+    const updatedTasks = mergedTasks.filter(task => task.id !== taskId);
+    
+    try {
+      await updateGitHubWorkspace({ tasks: updatedTasks });
+    } catch (error) {
+      console.error('Failed to save task deletion to GitHub:', error);
+    }
+  };
 
   if (loading || githubLoading) {
     return (
@@ -94,10 +191,10 @@ export default function SharedWorkspace() {
         <div className="workspace-tool-section">
           <UserTaskList 
             tasks={userTasks} 
-            markTaskComplete={(taskId) => markTaskComplete(taskId, currentUser)} 
-            addTask={addTask}
-            updateTask={updateTask}
-            deleteTask={deleteTask}
+            markTaskComplete={handleMarkTaskComplete} 
+            addTask={handleAddTask}
+            updateTask={handleUpdateTask}
+            deleteTask={handleDeleteTask}
           />
         </div>
 
