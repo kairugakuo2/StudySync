@@ -19,7 +19,7 @@ function SessionMan() {
   useEffect(() => {
     async function fetchSession() {
       try {
-        const response = await fetch('http://localhost:3000/api/sessions/upcoming');
+        const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/upcoming-session`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
