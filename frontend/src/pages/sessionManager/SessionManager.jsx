@@ -149,8 +149,3 @@ export default function SessionManagerDashboard() {
     </div>
   );
 }
-
-          type="text"
-          placeholder="Session Title"
-
-
