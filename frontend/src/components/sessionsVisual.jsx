@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import '../../pages/sharedWorkspace/SharedWorkspaceDashboard.jsx';
+import * as api from "../../api/sharedWorkspaceApi.js";
 function SessionMan() {
   console.log("SessionManager RENDERED");
 
@@ -19,7 +19,7 @@ function SessionMan() {
   useEffect(() => {
     async function fetchSession() {
       try {
-        const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/upcoming-session`);
+        const response = await fetch('http://localhost:3000/api/sessions/upcoming');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -105,16 +105,7 @@ function SessionMan() {
           <h2 className="text-lg font-semibold mb-3">All Sessions</h2>
 
           {sessions.length === 0 ? (
-  <div class="session-card">
-    <h3 class="session-title">Team Meeting</h3>
-    <p class="session-date"><strong>Date:</strong> December 10, 2025</p>
-    <p class="session-time"><strong>Time:</strong> 2:00 PM - 3:00 PM</p>
-    <p class="session-description">Discuss project milestones and assign tasks for the next sprint.</p>
-  </div>
-
-  <!-- More sessions can be added here -->
-</div>
-
+            <p className="text-sm text-slate-400">None yet</p>
           ) : (
             <div className="space-y-3 max-h-80 overflow-auto">
               {sessions.map((s) => (
@@ -159,14 +150,7 @@ function SessionMan() {
           <h2 className="text-lg font-semibold mb-3">Upcoming Sessions</h2>
 
           {upcoming.length === 0 ? (
-  <div class="session-card">
-    <h3 class="session-title">Team Meeting</h3>
-    <p class="session-date"><strong>Date:</strong> December 10, 2025</p>
-    <p class="session-time"><strong>Time:</strong> 2:00 PM - 3:00 PM</p>
-    <p class="session-description">Discuss project milestones and assign tasks for the next sprint.</p>
-  </div>
-</div>
-
+            <p className="text-sm text-slate-400">No upcoming sessions</p>
           ) : (
             <div className="space-y-3 max-h-80 overflow-auto">
               {upcoming.map((s) => (
