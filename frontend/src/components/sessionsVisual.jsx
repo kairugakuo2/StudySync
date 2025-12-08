@@ -163,18 +163,12 @@ function SessionMan() {
           <h2 className="text-lg font-semibold mb-3">Upcoming Sessions</h2>
 
           {upcoming.length === 0 ? (
-            <div class="upcoming-sessions">
-  <h2>Upcoming Sessions</h2>
-
-  <!-- Example single session -->
   <div class="session-card">
     <h3 class="session-title">Team Meeting</h3>
     <p class="session-date"><strong>Date:</strong> December 10, 2025</p>
     <p class="session-time"><strong>Time:</strong> 2:00 PM - 3:00 PM</p>
     <p class="session-description">Discuss project milestones and assign tasks for the next sprint.</p>
   </div>
-
-  <!-- More sessions can be added here -->
 </div>
 
           ) : (
