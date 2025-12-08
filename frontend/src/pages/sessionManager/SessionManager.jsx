@@ -1,4 +1,4 @@
-import useSessionManager from "../../hooks/useSessionManager";
+import { useSessionManager } from "../../hooks/useSessionManager";
 import "./SessionManagerDashboard.css";
 import { mockUsers } from '../../utils/mockData';
 
