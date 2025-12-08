@@ -22,6 +22,12 @@ export async function getCollaborators(workspaceId = "ws_001") {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
+    }
+    
     const data = await response.json();
     
     // Check if response indicates success
@@ -61,6 +67,11 @@ export async function getUpcomingSession() {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
+    }
     const data = await response.json();
     if (data.message && data.message.includes("Error")) {
       throw new Error(data.message);
@@ -81,6 +92,11 @@ export async function getRecentActivity() {
     const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/activity`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
     }
     const data = await response.json();
     if (data.message && data.message.includes("Error")) {
@@ -105,6 +121,12 @@ export async function getUserTasks(userId = 1, workspaceId = "ws_001") {
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
     }
     
     const data = await response.json();
@@ -136,6 +158,12 @@ export async function getWorkspaceState(userId = 1, workspaceId = "ws_001") {
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
     }
     
     const data = await response.json();
@@ -207,6 +235,12 @@ export async function addTask(task) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
+    }
+
     const data = await response.json();
     
     if (data.message && data.message.includes("Error")) {
@@ -241,6 +275,12 @@ export async function updateTask(taskId, taskData) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
+    }
+
     const data = await response.json();
     
     if (data.message && data.message.includes("Error")) {
@@ -272,6 +312,12 @@ export async function createWorkspace(workspaceData) {
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
     }
 
     const data = await response.json();
@@ -322,6 +368,12 @@ export async function updateWorkspace(workspaceId, workspaceData) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
+    }
+
     const data = await response.json();
     
     if (data.message && data.message.includes("Error")) {
@@ -355,6 +407,12 @@ export async function deleteWorkspace(workspaceId) {
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
     }
 
     const data = await response.json();
