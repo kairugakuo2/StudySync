@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   createSession,
   endSession,
   getUpcomingSessions,
   getSessionParticipants
-} from "../../../backend/src/features/sessionManager/sessionManagerController.js";
+} from "../../../backend/src/features/sessionManager/sessionManagerController.js"; // adjust path if needed
 
 export default function useSessionManager() {
   const [sessions, setSessions] = useState([]);
@@ -12,107 +12,85 @@ export default function useSessionManager() {
   const [participants, setParticipants] = useState([]);
   const [selectedSessionId, setSelectedSessionId] = useState(null);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
-  // Load upcoming sessions on mount
+  /* Helper: Refresh upcoming sessions */
+  function refreshUpcoming() {
+    try {
+      const result = getUpcomingSessions();
+      setUpcoming(result.sessions);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  /* Create a new session */
+  function create(data) {
+    setError("");
+    setMessage("");
+    try {
+      const result = createSession(data);
+
+      setSessions(prev => [...prev, result.session]);
+      setMessage(result.message);
+
+      refreshUpcoming();
+      return result.session;
+    } catch (err) {
+      setError(err.message);
+      return null;
+    }
+  }
+
+  /* End a session */
+  function end(sessionId) {
+    setError("");
+    setMessage("");
+
+    try {
+      const result = endSession(sessionId);
+
+      setSessions(prev =>
+        prev.map(s => (s.id === sessionId ? result.session : s))
+      );
+
+      setMessage(result.message);
+      refreshUpcoming();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  /* Load participant list for a session */
+  function loadParticipants(sessionId) {
+    setError("");
+    setMessage("");
+
+    try {
+      const result = getSessionParticipants(sessionId);
+      setParticipants(result.participants);
+      setSelectedSessionId(sessionId);
+      setMessage(result.message);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  /* On mount: initialize upcoming list */
   useEffect(() => {
     refreshUpcoming();
   }, []);
 
-
-  const refreshUpcoming = useCallback(() => {
-    try {
-      const res = getUpcomingSessions();
-      setUpcoming(res.sessions);
-    } catch (err) {
-      setError(err.message);
-    }
-  }, []);
-
-  // -----------------------------
-  // Create session
-  // -----------------------------
-  const handleCreateSession = useCallback(
-    ({ title, startTime, endTime, participants }) => {
-      setError("");
-      setMessage("");
-
-      try {
-        const res = createSession({
-          title,
-          startTime,
-          endTime,
-          participants
-        });
-
-        setSessions(prev => [...prev, res.session]);
-        setMessage("Session created successfully");
-        refreshUpcoming();
-        return res.session;
-      } catch (err) {
-        setError(err.message);
-        return null;
-      }
-    },
-    [refreshUpcoming]
-  );
-
-  // -----------------------------
-  // End session
-  // -----------------------------
-  const handleEndSession = useCallback(
-    (sessionId) => {
-      setError("");
-      setMessage("");
-
-      try {
-        const res = endSession(sessionId);
-        setMessage(res.message);
-        refreshUpcoming();
-      } catch (err) {
-        setError(err.message);
-      }
-    },
-    [refreshUpcoming]
-  );
-
-  // -----------------------------
-  // Load participants
-  // -----------------------------
-  const loadParticipants = useCallback(
-    (sessionId) => {
-      setError("");
-      setParticipants([]);
-      setSelectedSessionId(sessionId);
-
-      try {
-        const res = getSessionParticipants(sessionId);
-        setParticipants(res.participants);
-      } catch (err) {
-        setError(err.message);
-      }
-    },
-    []
-  );
-
   return {
-    // data
     sessions,
     upcoming,
     participants,
     selectedSessionId,
-    
-    // status
-    loading,
     error,
     message,
-
-    // actions
-    create: handleCreateSession,
-    end: handleEndSession,
-    loadParticipants,
-    refreshUpcoming
+    create,
+    end,
+    loadParticipants
   };
 }
