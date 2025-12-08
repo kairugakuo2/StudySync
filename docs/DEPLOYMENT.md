@@ -9,25 +9,25 @@ StudySync uses mock data and local state, so **only the frontend needs to be dep
 ## Deploy Frontend to Vercel
 
 ### Step 1: Install Vercel CLI
-```bash
+   ```bash
 npm install -g vercel
-```
+   ```
 
 ### Step 2: Login to Vercel
-```bash
-vercel login
-```
+   ```bash
+   vercel login
+   ```
 - Follow browser prompt to authenticate
 
 ### Step 3: Navigate to Frontend Directory
-```bash
-cd frontend
-```
+   ```bash
+   cd frontend
+   ```
 
 ### Step 4: Deploy to Vercel
-```bash
-vercel --prod
-```
+   ```bash
+   vercel --prod
+   ```
 
 **Answer prompts:**
 - **Link to existing project?** → `N` (first time)
@@ -50,9 +50,9 @@ Your app is now live at `https://studysync-frontend.vercel.app`
 3. Select your StudySync repository
 
 ### Step 2: Configure Build Settings
-- **Base directory:** `frontend`
-- **Build command:** `npm run build`
-- **Publish directory:** `dist`
+   - **Base directory:** `frontend`
+   - **Build command:** `npm run build`
+   - **Publish directory:** `dist`
 
 ### Step 3: Deploy
 - Click **"Deploy site"**

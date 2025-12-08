@@ -243,6 +243,8 @@ export const mockWorkspaces = [
     id: "ws_001",
     name: "CS3203 Study Group",
     description: "Shared group workspace for CS3203 Software Engineering.",
+    status: "active",
+    ownerId: 11, // Dr. Johnson (first tutor)
     members: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], // All users from mockUsers
     createdAt: "2025-09-15T10:00:00Z",
     collaboratorList: [
@@ -261,11 +263,60 @@ export const mockWorkspaces = [
       { userId: 13, role: "tutor" }  // TA Roberts (edge case user)
     ]
   },
+  {
+    id: "ws_002",
+    name: "MATH101 Study Session",
+    description: "Collaborative workspace for MATH101 Calculus I. Focus on problem sets and exam prep.",
+    status: "active",
+    ownerId: 20, // Dr. Green (tutor)
+    members: [1, 2, 4, 20], // Students + Dr. Green (tutor)
+    createdAt: "2025-09-20T14:00:00Z",
+    collaboratorList: [
+      { userId: 1, role: "member" },
+      { userId: 2, role: "member" },
+      { userId: 4, role: "member" },
+      { userId: 20, role: "tutor" } // Dr. Green
+    ]
+  },
+  {
+    id: "ws_003",
+    name: "Data Structures Review",
+    description: "Advanced study group for data structures and algorithms. Weekly problem solving sessions.",
+    status: "active",
+    ownerId: 24, // Dr. Smith (tutor)
+    members: [3, 5, 6, 7, 8, 24], // Students + Dr. Smith (tutor)
+    createdAt: "2025-09-25T09:00:00Z",
+    collaboratorList: [
+      { userId: 3, role: "member" },
+      { userId: 5, role: "member" },
+      { userId: 6, role: "member" },
+      { userId: 7, role: "member" },
+      { userId: 8, role: "member" },
+      { userId: 24, role: "tutor" } // Dr. Smith
+    ]
+  },
+  {
+    id: "ws_004",
+    name: "Physics Study Hub",
+    description: "Group workspace for PHYS201. Share notes, solve problems, and prepare for exams together.",
+    status: "idle",
+    ownerId: 21, // Prof. Miller (tutor)
+    members: [2, 9, 10, 21], // Students + Prof. Miller (tutor)
+    createdAt: "2025-10-05T11:00:00Z",
+    collaboratorList: [
+      { userId: 2, role: "member" },
+      { userId: 9, role: "member" },
+      { userId: 10, role: "member" },
+      { userId: 21, role: "tutor" } // Prof. Miller
+    ]
+  },
   // Edge workspace: no members
   {
     id: "ws_empty",
     name: "Empty Workspace",
     description: "No members yet",
+    status: "idle",
+    ownerId: null, // No owner
     members: [],
     createdAt: "2025-10-01T10:00:00Z",
     collaboratorList: []
@@ -282,20 +333,43 @@ export const mockTasks = [
 
 // mockWorkspaceTasks: Dashboard tasks for Shared Workspace view (expanded set with due dates)
 // Note: These represent workspace-level tasks visible in the dashboard
+// Each task is linked to a specific workspace via workspaceId
 // inProgressBy and doneBy track who marked the task with their status
 export const mockWorkspaceTasks = [
-  { id: 1, title: "Review Trees", status: "open", due: "2025-03-21T23:59:00Z" },
-  { id: 2, title: "Finish Assignment a_001", status: "open", due: "2025-03-25T23:59:00Z" },
-  { id: 3, title: "Rewatch DP Lecture", status: "in-progress", due: "2025-03-20T23:59:00Z", inProgressBy: { userId: 1, name: "John Doe", timestamp: "2025-03-19T10:00:00Z" } },
-  { id: 4, title: "Prepare Notes for Session 3", status: "done", due: "2025-03-18T23:59:00Z", doneBy: { userId: 2, name: "Jane Smith", timestamp: "2025-03-18T15:30:00Z" } },
-  { id: 5, title: "Solve Practice Problems Set 4", status: "open", due: "2025-03-28T23:59:00Z" },
-  { id: 6, title: "Implement Binary Search Tree", status: "in-progress", due: "2025-03-22T23:59:00Z", inProgressBy: { userId: 3, name: "Carlos Vega", timestamp: "2025-03-19T14:20:00Z" } },
-  { id: 7, title: "Create Flashcards for Hashing", status: "open", due: "2025-03-26T23:59:00Z" },
-  { id: 8, title: "Debug Session Manager Tests", status: "open", due: "2025-03-24T23:59:00Z" },
-  { id: 9, title: "Write Summary Notes for Trees", status: "done", due: "2025-03-19T23:59:00Z", doneBy: { userId: 1, name: "John Doe", timestamp: "2025-03-19T09:15:00Z" } },
-  { id: 10, title: "Collaborate on Whiteboard Diagram", status: "in-progress", due: "2025-03-23T23:59:00Z", inProgressBy: { userId: 4, name: "Emily Nguyen", timestamp: "2025-03-19T11:45:00Z" } },
-  { id: 11, title: "Review Partner Code", status: "open", due: "2025-03-30T23:59:00Z" },
-  { id: 12, title: "Submit Team Retrospective", status: "open", due: "2025-03-29T23:59:00Z" }
+  // CS3203 Study Group (ws_001) - Software Engineering tasks
+  { id: 1, workspaceId: "ws_001", title: "Review Software Design Patterns", status: "open", due: "2025-03-21T23:59:00Z", assignedTo: [1, 2, 3] },
+  { id: 2, workspaceId: "ws_001", title: "Complete Group Project Milestone 2", status: "open", due: "2025-03-25T23:59:00Z", assignedTo: [1, 2, 3, 4, 5] },
+  { id: 3, workspaceId: "ws_001", title: "Review Agile Methodology Lecture", status: "in-progress", due: "2025-03-20T23:59:00Z", inProgressBy: { userId: 1, name: "John Doe", timestamp: "2025-03-19T10:00:00Z" }, assignedTo: [1, 2] },
+  { id: 4, workspaceId: "ws_001", title: "Prepare Code Review Session", status: "done", due: "2025-03-18T23:59:00Z", doneBy: { userId: 2, name: "Jane Smith", timestamp: "2025-03-18T15:30:00Z" }, assignedTo: [2] },
+  { id: 5, workspaceId: "ws_001", title: "Write Unit Tests for Module 3", status: "open", due: "2025-03-28T23:59:00Z", assignedTo: [3, 4, 5] },
+  { id: 6, workspaceId: "ws_001", title: "Implement REST API Endpoints", status: "in-progress", due: "2025-03-22T23:59:00Z", inProgressBy: { userId: 3, name: "Carlos Vega", timestamp: "2025-03-19T14:20:00Z" }, assignedTo: [3, 6] },
+  { id: 7, workspaceId: "ws_001", title: "Create Database Schema Diagram", status: "open", due: "2025-03-26T23:59:00Z", assignedTo: [4, 7] },
+  { id: 8, workspaceId: "ws_001", title: "Debug Integration Tests", status: "open", due: "2025-03-24T23:59:00Z", assignedTo: [5, 8] },
+  { id: 9, workspaceId: "ws_001", title: "Write Project Documentation", status: "done", due: "2025-03-19T23:59:00Z", doneBy: { userId: 1, name: "John Doe", timestamp: "2025-03-19T09:15:00Z" }, assignedTo: [1] },
+  { id: 10, workspaceId: "ws_001", title: "Collaborate on System Architecture", status: "in-progress", due: "2025-03-23T23:59:00Z", inProgressBy: { userId: 4, name: "Emily Nguyen", timestamp: "2025-03-19T11:45:00Z" }, assignedTo: [4, 6, 7] },
+  
+  // MATH101 Study Session (ws_002) - Calculus tasks
+  { id: 11, workspaceId: "ws_002", title: "Complete Limits Problem Set", status: "open", due: "2025-03-22T23:59:00Z", assignedTo: [1, 2] },
+  { id: 12, workspaceId: "ws_002", title: "Review Derivatives Chapter 3", status: "in-progress", due: "2025-03-20T23:59:00Z", inProgressBy: { userId: 2, name: "Jane Smith", timestamp: "2025-03-19T09:00:00Z" }, assignedTo: [2, 4] },
+  { id: 13, workspaceId: "ws_002", title: "Solve Integration Practice Problems", status: "open", due: "2025-03-26T23:59:00Z", assignedTo: [1, 4] },
+  { id: 14, workspaceId: "ws_002", title: "Prepare for Midterm Exam", status: "open", due: "2025-03-28T23:59:00Z", assignedTo: [1, 2, 4] },
+  { id: 15, workspaceId: "ws_002", title: "Review Chain Rule Examples", status: "done", due: "2025-03-19T23:59:00Z", doneBy: { userId: 1, name: "John Doe", timestamp: "2025-03-19T08:00:00Z" }, assignedTo: [1] },
+  
+  // Data Structures Review (ws_003) - Algorithms and Data Structures tasks
+  { id: 16, workspaceId: "ws_003", title: "Implement Binary Search Tree", status: "in-progress", due: "2025-03-22T23:59:00Z", inProgressBy: { userId: 5, name: "Michael Chen", timestamp: "2025-03-19T13:00:00Z" }, assignedTo: [3, 5, 6] },
+  { id: 17, workspaceId: "ws_003", title: "Solve Dynamic Programming Problems", status: "open", due: "2025-03-25T23:59:00Z", assignedTo: [5, 6, 7] },
+  { id: 18, workspaceId: "ws_003", title: "Review Graph Algorithms", status: "open", due: "2025-03-27T23:59:00Z", assignedTo: [3, 7, 8] },
+  { id: 19, workspaceId: "ws_003", title: "Practice Hash Table Implementation", status: "open", due: "2025-03-24T23:59:00Z", assignedTo: [6, 8] },
+  { id: 20, workspaceId: "ws_003", title: "Complete Sorting Algorithm Analysis", status: "done", due: "2025-03-18T23:59:00Z", doneBy: { userId: 7, name: "David Kim", timestamp: "2025-03-18T16:00:00Z" }, assignedTo: [7] },
+  { id: 21, workspaceId: "ws_003", title: "Study Time Complexity Concepts", status: "in-progress", due: "2025-03-23T23:59:00Z", inProgressBy: { userId: 3, name: "Carlos Vega", timestamp: "2025-03-19T10:30:00Z" }, assignedTo: [3, 5] },
+  
+  // Physics Study Hub (ws_004) - Physics tasks
+  { id: 22, workspaceId: "ws_004", title: "Complete Mechanics Problem Set", status: "open", due: "2025-03-24T23:59:00Z", assignedTo: [2, 9] },
+  { id: 23, workspaceId: "ws_004", title: "Review Thermodynamics Chapter", status: "open", due: "2025-03-26T23:59:00Z", assignedTo: [9, 10] },
+  { id: 24, workspaceId: "ws_004", title: "Solve Wave Equation Problems", status: "in-progress", due: "2025-03-22T23:59:00Z", inProgressBy: { userId: 10, name: "Sarah Johnson", timestamp: "2025-03-19T14:00:00Z" }, assignedTo: [10] },
+  { id: 25, workspaceId: "ws_004", title: "Prepare Lab Report", status: "open", due: "2025-03-28T23:59:00Z", assignedTo: [2, 9, 10] },
+  
+  // Empty Workspace (ws_empty) - No tasks
 ];
 
 // ---------- SHARED WORKSPACE DASHBOARD DATA ----------

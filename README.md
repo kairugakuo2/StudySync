@@ -270,17 +270,17 @@ Each teammate writes and runs manual JavaScript tests for their individual featu
 
 ### Running Tests
 
-```bash
+   ```bash
 # Navigate to test directory
-cd tests/<feature-folder>
+   cd tests/<feature-folder>
 
 # Run a test file
-node <test_file>.js
+   node <test_file>.js
 
 # Example
-cd tests/sharedWorkspaceDashboard
-node test_displayDashboard.js
-```
+   cd tests/sharedWorkspaceDashboard
+   node test_displayDashboard.js
+   ```
 
 ### Test Structure
 

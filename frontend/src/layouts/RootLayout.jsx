@@ -1,16 +1,19 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { mockUsers } from '../utils/mockData';
+import AuthService from '../services/authService';
 import './RootLayout.css';
 
 export default function RootLayout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const isLoginPage = location.pathname === '/login';
+  const isLoginPage = location.pathname === '/login' || location.pathname === '/demo-login';
   const [showUserModal, setShowUserModal] = useState(false);
   
+  // Support both old and new auth systems
   const currentUserId = localStorage.getItem('currentUserId');
-  const currentUser = currentUserId ? mockUsers[currentUserId] : null;
+  const demoUser = AuthService.getCurrentUser();
+  const currentUser = currentUserId ? mockUsers[currentUserId] : (demoUser ? { ...demoUser, email: '', courses: [] } : null);
 
   const handleUserIconClick = () => {
     if (currentUser) {
@@ -30,8 +33,9 @@ export default function RootLayout({ children }) {
 
   const handleLogout = () => {
     localStorage.removeItem('currentUserId');
+    AuthService.logout(); // Also logout from demo auth
     setShowUserModal(false);
-    navigate('/login');
+    navigate('/demo-login');
   };
 
   const formatRole = (role) => {

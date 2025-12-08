@@ -34,10 +34,10 @@
   margin-bottom: 1.5rem;
 }
 
-.dashboard-future-sections {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+.dashboard-workspace-selector-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e5e7eb;
 }
 
 .collaborator-list,
@@ -68,6 +68,31 @@
   font-weight: 600;
   color: #1a1a1a;
   margin: 0 0 1.25rem 0;
+}
+
+.workspace-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.edit-workspace-btn {
+  padding: 0.5rem 1rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.edit-workspace-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 .empty-state {

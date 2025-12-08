@@ -28,7 +28,7 @@ export function useSharedWorkspace({ userId = 1, workspaceId = "ws_001" } = {}) 
         // Fetch all data in parallel
         const [collaboratorsData, tasksData, workspaceData, sessionData, activityData] = await Promise.all([
           getCollaborators(workspaceId),
-          getUserTasks(userId),
+          getUserTasks(userId, workspaceId),
           getWorkspaceState(userId, workspaceId),
           getUpcomingSession(),
           getRecentActivity()
@@ -128,9 +128,11 @@ export function useSharedWorkspace({ userId = 1, workspaceId = "ws_001" } = {}) 
     const maxId = tasks.length > 0 ? Math.max(...tasks.map(t => typeof t.id === 'number' ? t.id : parseInt(t.id) || 0)) : 0;
     const newTask = {
       id: maxId + 1,
+      workspaceId: workspaceId, // Link task to current workspace
       title: taskData.title,
       status: taskData.status || 'open',
-      due: taskData.due || null
+      due: taskData.due || null,
+      assignedTo: taskData.assignedTo || [userId] // Default to current user
     };
 
     // Update local state immediately

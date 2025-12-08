@@ -55,10 +55,10 @@ function SessionMan() {
   // Load upcoming sessions on mount
   useEffect(() => {
     async function loadSessions() {
-      try {
+    try {
         const u = await getUpcomingSessions();
-        setUpcoming(u.sessions);
-      } catch (err) {
+      setUpcoming(u.sessions);
+    } catch (err) {
         setError(err.message);
       }
     }

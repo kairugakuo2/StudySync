@@ -2,9 +2,9 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 // Import shared mock data
 import { 
-  mockCollaborators, 
+  mockWorkspaces,
+  mockUsers,
   mockWorkspaceTasks as mockTasks, 
-  mockWorkspaceState, 
   mockUpcomingSession, 
   mockActivity 
 } from '../utils/mockData.js';
@@ -32,7 +32,22 @@ export async function getCollaborators(workspaceId = "ws_001") {
     return data.collaborators || [];
   } catch (error) {
     console.warn('Failed to fetch collaborators, using mock data:', error);
-    return mockCollaborators;
+    // Derive collaborators from selected workspace
+    const workspace = mockWorkspaces.find(ws => ws.id === workspaceId) || mockWorkspaces[0];
+    const presenceByUserId = {
+      1: "active", 2: "idle", 3: "offline", 4: "active", 5: "active",
+      6: "idle", 7: "active", 8: "offline", 9: "active", 10: "idle",
+      11: "active", 12: "offline", 13: "active", 20: "active", 21: "idle", 24: "active"
+    };
+    return (workspace.collaboratorList || []).map(collab => {
+      const user = Object.values(mockUsers).find(u => u.id === collab.userId);
+      return {
+        userId: collab.userId,
+        name: user ? user.name : `Unknown User ${collab.userId}`,
+        role: collab.role,
+        status: presenceByUserId[collab.userId] || "offline"
+      };
+    });
   }
 }
 
@@ -79,13 +94,14 @@ export async function getRecentActivity() {
 }
 
 /**
- * Fetches user tasks
+ * Fetches user tasks for a specific workspace
  * @param {number} userId - The user ID (default: 1)
+ * @param {string} workspaceId - The workspace ID to filter tasks by (default: "ws_001")
  * @returns {Promise<Array>} Array of task objects
  */
-export async function getUserTasks(userId = 1) {
+export async function getUserTasks(userId = 1, workspaceId = "ws_001") {
   try {
-    const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/tasks?userId=${userId}`);
+    const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/tasks?userId=${userId}&workspaceId=${workspaceId}`);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -98,10 +114,13 @@ export async function getUserTasks(userId = 1) {
       throw new Error(data.message);
     }
     
-    return data.tasks || [];
+    // Filter tasks by workspaceId only (show all tasks for the workspace)
+    const tasks = data.tasks || [];
+    return tasks.filter(task => task.workspaceId === workspaceId);
   } catch (error) {
     console.warn('Failed to fetch tasks, using mock data:', error);
-    return mockTasks;
+    // Filter mock data by workspaceId only (show all tasks for the workspace)
+    return mockTasks.filter(task => task.workspaceId === workspaceId);
   }
 }
 
@@ -136,10 +155,36 @@ export async function getWorkspaceState(userId = 1, workspaceId = "ws_001") {
       };
     }
     
-    return mockWorkspaceState;
+    // Derive workspace state from selected workspace
+    const workspace = mockWorkspaces.find(ws => ws.id === workspaceId) || mockWorkspaces[0];
+    const tutor = workspace.collaboratorList?.find(c => c.role === 'tutor');
+    const tutorUser = tutor ? Object.values(mockUsers).find(u => u.id === tutor.userId) : null;
+    
+    return {
+      id: workspace.id,
+      name: workspace.name,
+      status: workspace.status || (workspace.members?.length > 0 ? "active" : "idle"),
+      memberCount: workspace.members?.length || 0,
+      tutor: tutorUser ? tutorUser.name : null,
+      description: workspace.description,
+      ownerId: workspace.ownerId
+    };
   } catch (error) {
     console.warn('Failed to fetch workspace state, using mock data:', error);
-    return mockWorkspaceState;
+    // Derive workspace state from selected workspace
+    const workspace = mockWorkspaces.find(ws => ws.id === workspaceId) || mockWorkspaces[0];
+    const tutor = workspace.collaboratorList?.find(c => c.role === 'tutor');
+    const tutorUser = tutor ? Object.values(mockUsers).find(u => u.id === tutor.userId) : null;
+    
+    return {
+      id: workspace.id,
+      name: workspace.name,
+      status: workspace.status || (workspace.members?.length > 0 ? "active" : "idle"),
+      memberCount: workspace.members?.length || 0,
+      tutor: tutorUser ? tutorUser.name : null,
+      description: workspace.description,
+      ownerId: workspace.ownerId
+    };
   }
 }
 
@@ -207,6 +252,122 @@ export async function updateTask(taskId, taskData) {
     console.warn('Failed to save task update to backend, task updated locally only:', error);
     // Task is already updated in local state, so we just log the warning
     return taskData;
+  }
+}
+
+/**
+ * Creates a new workspace
+ * @param {Object} workspaceData - Workspace data { name, description, ownerId }
+ * @returns {Promise<Object>} Created workspace object
+ */
+export async function createWorkspace(workspaceData) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/workspaces`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(workspaceData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.message && data.message.includes("Error")) {
+      throw new Error(data.message);
+    }
+
+    return data.workspace || workspaceData;
+  } catch (error) {
+    console.warn('Failed to create workspace on backend, using local data:', error);
+    // Generate new workspace ID
+    const maxId = Math.max(...mockWorkspaces.map(ws => {
+      const num = parseInt(ws.id.replace('ws_', ''));
+      return isNaN(num) ? 0 : num;
+    }));
+    const newWorkspace = {
+      id: `ws_${String(maxId + 1).padStart(3, '0')}`,
+      name: workspaceData.name,
+      description: workspaceData.description || '',
+      status: 'idle',
+      ownerId: workspaceData.ownerId,
+      members: [workspaceData.ownerId],
+      createdAt: new Date().toISOString(),
+      collaboratorList: [{ userId: workspaceData.ownerId, role: 'tutor' }]
+    };
+    return newWorkspace;
+  }
+}
+
+/**
+ * Updates a workspace (name, description)
+ * @param {string} workspaceId - The workspace ID
+ * @param {Object} workspaceData - Updated workspace data { name, description }
+ * @returns {Promise<Object>} Updated workspace object
+ */
+export async function updateWorkspace(workspaceId, workspaceData) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/workspaces/${workspaceId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(workspaceData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.message && data.message.includes("Error")) {
+      throw new Error(data.message);
+    }
+
+    return data.workspace || workspaceData;
+  } catch (error) {
+    console.warn('Failed to update workspace on backend, using local data:', error);
+    const workspace = mockWorkspaces.find(ws => ws.id === workspaceId);
+    if (workspace) {
+      return {
+        ...workspace,
+        ...workspaceData
+      };
+    }
+    throw error;
+  }
+}
+
+/**
+ * Deletes a workspace
+ * @param {string} workspaceId - The workspace ID to delete
+ * @returns {Promise<boolean>} Success status
+ */
+export async function deleteWorkspace(workspaceId) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/shared-workspace-dashboard/workspaces/${workspaceId}`, {
+      method: 'DELETE'
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.message && data.message.includes("Error")) {
+      throw new Error(data.message);
+    }
+
+    return true;
+  } catch (error) {
+    console.warn('Failed to delete workspace on backend:', error);
+    // Still return true for local deletion
+    return true;
   }
 }
 
