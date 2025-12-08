@@ -1,5 +1,5 @@
-import { useSessionManager } from "../../hooks/useSessionManager";
-import "./SessionManagerDashboard.css";
+import { useSessionManager } from '../../hooks/useSessionManager';
+import './SessionManagerDashboard.css';
 import { mockUsers } from '../../utils/mockData';
 
 export default function SessionManagerDashboard() {
