@@ -22,13 +22,14 @@ export async function getCollaborators(workspaceId = "ws_001") {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    // Check if response is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Response is not JSON');
+    // Read as text first to safely check if it's JSON
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      throw new Error('Response is not valid JSON');
     }
-    
-    const data = await response.json();
     
     // Check if response indicates success
     if (data.message && data.message.includes("Error")) {
@@ -67,12 +68,14 @@ export async function getUpcomingSession() {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    // Check if response is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Response is not JSON');
+    // Read as text first to safely check if it's JSON
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      throw new Error('Response is not valid JSON');
     }
-    const data = await response.json();
     if (data.message && data.message.includes("Error")) {
       throw new Error(data.message);
     }
@@ -93,12 +96,14 @@ export async function getRecentActivity() {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    // Check if response is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Response is not JSON');
+    // Read as text first to safely check if it's JSON
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      throw new Error('Response is not valid JSON');
     }
-    const data = await response.json();
     if (data.message && data.message.includes("Error")) {
       throw new Error(data.message);
     }
@@ -123,13 +128,14 @@ export async function getUserTasks(userId = 1, workspaceId = "ws_001") {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    // Check if response is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Response is not JSON');
+    // Read as text first to safely check if it's JSON
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      throw new Error('Response is not valid JSON');
     }
-    
-    const data = await response.json();
     
     // Check if response indicates success
     if (data.message && data.message.includes("Error")) {
@@ -160,13 +166,14 @@ export async function getWorkspaceState(userId = 1, workspaceId = "ws_001") {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    // Check if response is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Response is not JSON');
+    // Read as text first to safely check if it's JSON
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      throw new Error('Response is not valid JSON');
     }
-    
-    const data = await response.json();
     
     // Check if response indicates success
     if (data.message && data.message.includes("Error")) {
@@ -235,13 +242,14 @@ export async function addTask(task) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Check if response is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Response is not JSON');
+    // Read as text first to safely check if it's JSON
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      throw new Error('Response is not valid JSON');
     }
-
-    const data = await response.json();
     
     if (data.message && data.message.includes("Error")) {
       throw new Error(data.message);
@@ -275,13 +283,14 @@ export async function updateTask(taskId, taskData) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Check if response is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Response is not JSON');
+    // Read as text first to safely check if it's JSON
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      throw new Error('Response is not valid JSON');
     }
-
-    const data = await response.json();
     
     if (data.message && data.message.includes("Error")) {
       throw new Error(data.message);
@@ -314,13 +323,14 @@ export async function createWorkspace(workspaceData) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Check if response is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Response is not JSON');
+    // Read as text first to safely check if it's JSON
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      throw new Error('Response is not valid JSON');
     }
-
-    const data = await response.json();
     
     if (data.message && data.message.includes("Error")) {
       throw new Error(data.message);
@@ -368,13 +378,14 @@ export async function updateWorkspace(workspaceId, workspaceData) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Check if response is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Response is not JSON');
+    // Read as text first to safely check if it's JSON
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      throw new Error('Response is not valid JSON');
     }
-
-    const data = await response.json();
     
     if (data.message && data.message.includes("Error")) {
       throw new Error(data.message);
@@ -409,13 +420,14 @@ export async function deleteWorkspace(workspaceId) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Check if response is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Response is not JSON');
+    // Read as text first to safely check if it's JSON
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      throw new Error('Response is not valid JSON');
     }
-
-    const data = await response.json();
     
     if (data.message && data.message.includes("Error")) {
       throw new Error(data.message);
