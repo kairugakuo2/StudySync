@@ -1,0 +1,24 @@
+name: Deploy Frontend to Vercel (Simple)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Deploy to Vercel
+        run: |
+          echo "🚀 Vercel will auto-deploy from GitHub connection"
+          echo "Make sure Vercel is connected to this repo in Vercel dashboard"
+          echo "Vercel watches for changes in the 'frontend' directory"
+
+

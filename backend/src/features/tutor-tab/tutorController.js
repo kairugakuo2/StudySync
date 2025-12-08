@@ -10,7 +10,7 @@ function normalizeName(raw) {
     let name = raw.trim();
     if (name.length === 0) throw new Error('name cannot be empty');
     if (name.length > NAME_MAX) throw new Error('name too long');
-    if (!/^[A-Za-z' -]+$/.test(name)) throw new Error('name has invalid character');
+    if (!/^[A-Za-z' -]+$/.test(name)) throw new Error('name has invalid characters');
     name = name.replace(/\s+/g, ' ');
     return name
 }
@@ -50,7 +50,23 @@ function addNoteLogic(studnetId, { text, tags = []}) {
 function listNotesLogic(studentId) {
     return notes.filter(n => n.studentId === studentId);
 }
-exports.createStudent = (req, res) =>{
+function reset() {
+    students = [];
+    sessions = [];
+    notes = [];
+}
+export { 
+    addStudentLogic,
+    listStudentsLogic,
+    reset,
+    
+};
+export default {
+    addStudentLogic,
+    listStudentsLogic,
+    reset
+}
+/*exports.createStudent = (req, res) =>{
     const s = addStudentLogic(req.body?.name);
     res.status(201).json(s);
 };
@@ -70,7 +86,7 @@ exports.createNote = (req, res) => {
     const note = addNoteLogic(req.params.studentId, req.body || {});
     res.status(201).json(note);
 };
-eports.listNotes = (req, res) => {
+exports.listNotes = (req, res) => {
     res.json(listNotesLogic(req.params.studentId));
 };
 
@@ -78,4 +94,4 @@ exports.__test = {
     reset: () => { students = []; sessions = []; notes = []; },
     addStudentLogic,
     listStudentsLogic,
-};
+};*/
