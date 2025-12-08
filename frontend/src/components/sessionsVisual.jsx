@@ -97,7 +97,7 @@ function SessionMan() {
     }
   }
 
-  return e(
+  return (
     <div className="w-full h-full flex flex-col px-4 py-6 gap-6" style={{ maxWidth: "1000px", margin: "0 auto" }}>
       <h1 className="text-2xl font-semibold">Session Manager</h1>
 
