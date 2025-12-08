@@ -1,4 +1,3 @@
-import { useState } from "react";
 import useSessionManager from "../../hooks/useSessionManager";
 import "./SessionManagerDashboard.css";
 
