@@ -15,6 +15,7 @@ function validateSessionData({ title, startTime, endTime, participants }) {
   if (!title || typeof title !== "string" || title.trim() === "") {
     throw new Error("Session title is required");
   }
+   if (title.length > 100) throw new Error('Session title too long');
    if (!/^[ -~]+$/.test(title)) {
     throw new Error('Session title has invalid characters');
    }
