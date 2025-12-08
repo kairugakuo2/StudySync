@@ -1,5 +1,41 @@
 import React, { useState, useEffect } from "react";
-import getUpcomingSessions from "../../api/sharedWorkspaceApi.js";
+import { getUpcomingSession } from "../api/sharedWorkspaceApi.js";
+
+// Helper function to convert single session to array format
+async function getUpcomingSessions() {
+  const session = await getUpcomingSession();
+  return { sessions: session ? [session] : [] };
+}
+
+// Stub functions for session management (to be implemented with backend API)
+function createSession(sessionData) {
+  const newSession = {
+    id: `session_${Date.now()}`,
+    title: sessionData.title,
+    startTime: new Date(sessionData.startTime),
+    endTime: new Date(sessionData.endTime),
+    participants: sessionData.participants || [],
+    status: "scheduled"
+  };
+  return { session: newSession };
+}
+
+function endSession(sessionId) {
+  // In a real implementation, this would call the backend API
+  return {
+    session: {
+      id: sessionId,
+      status: "completed"
+    }
+  };
+}
+
+function getSessionParticipants(sessionId) {
+  // In a real implementation, this would call the backend API
+  // For now, return empty array
+  return { participants: [] };
+}
+
 function SessionMan() {
   console.log("SessionManager RENDERED");
 
@@ -13,35 +49,38 @@ function SessionMan() {
   const [endTime, setEndTime] = useState("");
   const [participantsInput, setParticipantsInput] = useState("");
 
-  const [error, setError] = useState("");  const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
   // Load upcoming sessions on mount
   useEffect(() => {
-    try {
-      const u = getUpcomingSessions();
-      setUpcoming(u.sessions);
-    } catch (err) {
-      setError(err.message);      setError(err.message);
+    async function loadSessions() {
+      try {
+        const u = await getUpcomingSessions();
+        setUpcoming(u.sessions);
+      } catch (err) {
+        setError(err.message);
+      }
     }
+    loadSessions();
   }, []);
 
-  function refreshUpcoming() {
+  async function refreshUpcoming() {
     try {
-      const u = getUpcomingSessions();
+      const u = await getUpcomingSessions();
       setUpcoming(u.sessions);
     } catch (err) {
-      setError(err.message);      setError(err.message);
+      setError(err.message);
     }
   }
 
   function handleCreate(e) {
     e.preventDefault();
-    setError("");    setError("");
+    setError("");
     setMessage("");
 
     try {
-      const newSession = createSession({
+      const result = createSession({
         title,
         startTime,
         endTime,
@@ -49,7 +88,8 @@ function SessionMan() {
           .split(",")
           .map((p) => p.trim())
           .filter(Boolean),
-      }).session;
+      });
+      const newSession = result.session;
 
       setSessions((prev) => [...prev, newSession]);
       setMessage("Session created.");
@@ -61,12 +101,12 @@ function SessionMan() {
       setEndTime("");
       setParticipantsInput("");
     } catch (err) {
-      setError(err.message);      setError(err.message);
+      setError(err.message);
     }
   }
 
   function handleEnd(sessionId) {
-    setError("");    setError("");
+    setError("");
     setMessage("");
 
     try {
@@ -79,12 +119,12 @@ function SessionMan() {
       setMessage("Session ended.");
       refreshUpcoming();
     } catch (err) {
-      setError(err.message);      setError(err.message);
+      setError(err.message);
     }
   }
 
   function handleLoadParticipants(sessionId) {
-    setError("");    setError("");
+    setError("");
     setMessage("");
 
     try {
@@ -93,7 +133,7 @@ function SessionMan() {
       setSelectedId(sessionId);
       setMessage("Participants loaded.");
     } catch (err) {
-      setError(err.message);      setError(err.message);
+      setError(err.message);
     }
   }
 
