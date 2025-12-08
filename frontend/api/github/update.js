@@ -102,7 +102,7 @@ export default async function handler(req, res) {
     const getUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${DATA_FILE_PATH}`;
     const getResponse = await fetch(getUrl, {
       headers: {
-        'Authorization': `token ${GITHUB_TOKEN}`,
+        'Authorization': `Bearer ${GITHUB_TOKEN}`,
         'Accept': 'application/vnd.github.v3+json'
       }
     });
@@ -198,7 +198,7 @@ export default async function handler(req, res) {
     const putResponse = await fetch(putUrl, {
       method: 'PUT',
       headers: {
-        'Authorization': `token ${GITHUB_TOKEN}`,
+        'Authorization': `Bearer ${GITHUB_TOKEN}`,
         'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json'
       },
@@ -229,9 +229,18 @@ export default async function handler(req, res) {
     
   } catch (error) {
     console.error('GitHub update error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      GITHUB_REPO,
+      hasToken: !!GITHUB_TOKEN,
+      workspaceId,
+      username
+    });
     return res.status(500).json({ 
       error: 'Failed to update GitHub',
-      message: error.message 
+      message: error.message,
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 }

@@ -57,6 +57,7 @@ class GitHubDataService {
     };
     
     try {
+      console.log('Calling GitHub API:', { workspaceId, username, updates: Object.keys(updatesToSend) });
       const response = await fetch('/api/github/update', {
         method: 'POST',
         headers: {
@@ -71,10 +72,12 @@ class GitHubDataService {
       
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Failed to update');
+        console.error('GitHub API error response:', error);
+        throw new Error(error.message || `Failed to update (${response.status})`);
       }
       
       const result = await response.json();
+      console.log('GitHub API success:', result);
       return result;
     } catch (error) {
       console.error('Error updating GitHub:', error);

@@ -70,9 +70,12 @@ export default function SharedWorkspace() {
     );
     
     try {
-      await updateGitHubWorkspace({ tasks: updatedTasks });
+      console.log('Saving task update to GitHub:', { workspaceId, taskId, updatedTask });
+      const result = await updateGitHubWorkspace({ tasks: updatedTasks });
+      console.log('Task update saved successfully:', result);
     } catch (error) {
       console.error('Failed to save task update to GitHub:', error);
+      alert(`Failed to save task update: ${error.message || 'Unknown error'}`);
     }
   };
 
@@ -94,9 +97,12 @@ export default function SharedWorkspace() {
     // Save to GitHub
     const updatedTasks = [...mergedTasks, newTask];
     try {
-      await updateGitHubWorkspace({ tasks: updatedTasks });
+      console.log('Saving new task to GitHub:', { workspaceId, newTask });
+      const result = await updateGitHubWorkspace({ tasks: updatedTasks });
+      console.log('New task saved successfully:', result);
     } catch (error) {
       console.error('Failed to save new task to GitHub:', error);
+      alert(`Failed to save new task: ${error.message || 'Unknown error'}`);
     }
   };
 
@@ -110,9 +116,12 @@ export default function SharedWorkspace() {
     );
     
     try {
-      await updateGitHubWorkspace({ tasks: updatedTasks });
+      console.log('Saving task edit to GitHub:', { workspaceId, taskId, taskData });
+      const result = await updateGitHubWorkspace({ tasks: updatedTasks });
+      console.log('Task edit saved successfully:', result);
     } catch (error) {
       console.error('Failed to save task update to GitHub:', error);
+      alert(`Failed to save task edit: ${error.message || 'Unknown error'}`);
     }
   };
 
@@ -124,9 +133,12 @@ export default function SharedWorkspace() {
     const updatedTasks = mergedTasks.filter(task => task.id !== taskId);
     
     try {
-      await updateGitHubWorkspace({ tasks: updatedTasks });
+      console.log('Saving task deletion to GitHub:', { workspaceId, taskId });
+      const result = await updateGitHubWorkspace({ tasks: updatedTasks });
+      console.log('Task deletion saved successfully:', result);
     } catch (error) {
       console.error('Failed to save task deletion to GitHub:', error);
+      alert(`Failed to delete task: ${error.message || 'Unknown error'}`);
     }
   };
 
