@@ -4,9 +4,9 @@ import {
   endSession,
   getUpcomingSessions,
   getSessionParticipants
-} from "../controllers/sessionManagerController";
+} from "../../../backend/src/features/sessionManager/sessionManagerController";
 
-export default function SessionManager() {
+function Session() {
   console.log("SessionManager RENDERED");
 
   const [sessions, setSessions] = useState([]);
@@ -103,7 +103,7 @@ export default function SessionManager() {
     }
   }
 
-  return (
+  return e(
     <div className="w-full h-full flex flex-col px-4 py-6 gap-6" style={{ maxWidth: "1000px", margin: "0 auto" }}>
       <h1 className="text-2xl font-semibold">Session Manager</h1>
 
@@ -237,3 +237,5 @@ export default function SessionManager() {
     </div>
   );
 }
+
+export default sessionsVisual;
