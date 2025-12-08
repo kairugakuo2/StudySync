@@ -15,6 +15,9 @@ function validateSessionData({ title, startTime, endTime, participants }) {
   if (!title || typeof title !== "string" || title.trim() === "") {
     throw new Error("Session title is required");
   }
+   if (!/^[ -~]+$/.test(title)) {
+    throw new Error('Session title has invalid characters');
+   }
   if (!startTime || !endTime) {
     throw new Error("Start and end time required");
   }
