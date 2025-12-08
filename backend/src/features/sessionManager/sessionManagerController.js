@@ -39,7 +39,7 @@ function validateSessionData({ title, startTime, endTime, participants }) {
   createSession
   Creates and stores a new study session
  */
-export function createSession({ title, startTime, endTime, participants }) {
+function createSession({ title, startTime, endTime, participants }) {
   validateSessionData({ title, startTime, endTime, participants });
 
   const session = {
@@ -60,7 +60,7 @@ export function createSession({ title, startTime, endTime, participants }) {
   endSession
   Marks a session as completed
  */
-export function endSession(sessionId) {
+function endSession(sessionId) {
   const session = sessions.find(s => s.id === sessionId);
   if (!session) throw new Error("Session not found");
   if (session.status === "completed") throw new Error("Session already ended");
@@ -74,7 +74,7 @@ export function endSession(sessionId) {
   getUpcomingSessions
   Returns sessions starting within the next X days (default 7)
  */
-export function getUpcomingSessions(days = 7, now = new Date()) {
+function getUpcomingSessions(days = 7, now = new Date()) {
   if (typeof days !== "number" || days <= 0) {
     throw new Error("Days must be a positive number");
   }
@@ -93,7 +93,7 @@ export function getUpcomingSessions(days = 7, now = new Date()) {
  getSessionParticipants
  Returns participant details for a specific session
  */
-export function getSessionParticipants(sessionId) {
+function getSessionParticipants(sessionId) {
   const session = sessions.find(s => s.id === sessionId);
   if (!session) throw new Error("Session not found");
 
@@ -104,3 +104,7 @@ export function getSessionParticipants(sessionId) {
     count: session.participants.length,
   };
 }
+export createSession;
+export endSession;
+export getUpcomingSessions;
+export getSessionParticipants;
