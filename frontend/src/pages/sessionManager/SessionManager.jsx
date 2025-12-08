@@ -1,9 +1,9 @@
-import sessionMan from "../../components/sessions.jsx";
+import SessionMan from "../../components/sessionsVisual.jsx";
 
 export default function sessionManager() {
   return (
     <div className="w-full h-full">
-      <sessionMan />
+      <SessionMan />
     </div>
   );
 }
